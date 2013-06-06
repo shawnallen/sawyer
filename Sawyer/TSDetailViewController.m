@@ -7,36 +7,31 @@
 //
 
 #import "TSDetailViewController.h"
+#import "ZYInstapaperActivity.h"
 
 @interface TSDetailViewController ()
+@property (weak, nonatomic) IBOutlet UIView *detailEnclosingView;
+@property (weak, nonatomic) IBOutlet UIButton *linkButton;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *publishedDate;
+@property (weak, nonatomic) IBOutlet UITextView *body;
+@property (weak, nonatomic) IBOutlet UILabel *noContentSelectedLabel;
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (strong, nonatomic) TSRiverItem *riverItem;
 @property (strong, nonatomic) TSRiverFeed *riverFeed;
 - (void)configureView;
+- (IBAction)showActions:(id)sender;
 @end
 
 @implementation TSDetailViewController
 
-#pragma mark - Managing the detail item
-
-- (void)setDetailItem:(TSRiverItem *)detailItem feed:(TSRiverFeed *)feed;
-{
-    if ([self riverItem] != detailItem || [self riverFeed] != feed) {
-        [self setRiverItem:detailItem];
-        [self setRiverFeed:feed];
-        [self configureView];
-    }
-
-    if (self.masterPopoverController != nil) {
-        [self.masterPopoverController dismissPopoverAnimated:YES];
-        return;
-    }
-}
+#pragma mark -
+#pragma mark Class extension
 
 - (void)configureView
 {
     if (IsEmpty([self riverFeed]))
-        [self setTitle:NSLocalizedString(@"Detail", nil)];
+        [self setTitle:NSLocalizedString(@"", nil)];
     else
         [self setTitle:[[self riverFeed] title]];
     
@@ -54,17 +49,50 @@
     [[self body] setText:[[self riverItem] body]];
 }
 
+- (IBAction)showActions:(id)sender
+{
+    if (IsEmpty([self riverItem]))
+        return;
+    
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[[self riverItem] link]] applicationActivities:@[[[ZYInstapaperActivity alloc] init]]];
+    [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypePrint]];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+        [popoverController presentPopoverFromBarButtonItem:[[self navigationItem] rightBarButtonItem] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        
+        [activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+            [popoverController dismissPopoverAnimated:YES];
+        }];
+
+    } else
+        [self presentViewController:activityViewController animated:YES completion:nil];
+}
+
+#pragma mark -
+#pragma mark API
+
+- (void)setDetailItem:(TSRiverItem *)detailItem feed:(TSRiverFeed *)feed;
+{
+    if ([self riverItem] != detailItem || [self riverFeed] != feed) {
+        [self setRiverItem:detailItem];
+        [self setRiverFeed:feed];
+        [self configureView];
+    }
+
+    if (IsEmpty([self masterPopoverController])) {
+        [self.masterPopoverController dismissPopoverAnimated:YES];
+        return;
+    }
+}
+
+#pragma mark -
+#pragma mark UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -74,7 +102,8 @@
     }
 }
 
-#pragma mark - Split view
+#pragma mark -
+#pragma mark UISplitViewControllerDelegate
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {

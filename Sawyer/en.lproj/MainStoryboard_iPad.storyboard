@@ -113,7 +113,13 @@
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Detail" id="53"/>
+                    <navigationItem key="navigationItem" title="Detail" id="53">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="uAf-bU-1wd">
+                            <connections>
+                                <action selector="showActions:" destination="4" id="uog-na-Dy3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="body" destination="P0f-SG-CkZ" id="iuM-93-Zwe"/>
                         <outlet property="detailEnclosingView" destination="WlL-fo-7Pz" id="2ce-VZ-xhY"/>
@@ -269,42 +275,6 @@
             <point key="canvasLocation" x="-366" y="248"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="TSDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSDetailViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="body" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="detailEnclosingView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="linkButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="noContentSelectedLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="publishedDate" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSFeedItemTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSFeedItemTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="body" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="date" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="title" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSMasterViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSMasterViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="refreshRiver"/>
-            </relationships>
-        </class>
-        <class className="TSWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWebViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
