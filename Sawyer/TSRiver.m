@@ -20,7 +20,8 @@
 
 @end
 
-NSString * const TSRiverDefaultURLString = @"http://dl.dropbox.com/u/19672994/newsriver/admin.json";
+NSString * const TSRiverDefaultURLString = @"http://static.scripting.com/river3/rivers/iowa.js";
+NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 
 @interface TSRiver ()
 
@@ -32,6 +33,7 @@ NSString * const TSRiverDefaultURLString = @"http://dl.dropbox.com/u/19672994/ne
 @property (nonatomic) NSString *version;
 @property (nonatomic) NSDate *whenRiverUpdatedDate;
 
+@property (nonatomic) NSString *paddingFunctionName;
 @property (nonatomic) NSOperationQueue *fetchQueue;
 @property (nonatomic) NSError *lastError;
 
@@ -57,7 +59,15 @@ NSString * const TSRiverDefaultURLString = @"http://dl.dropbox.com/u/19672994/ne
 
 - (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
 {
-    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:data options:0 error:error];
+    NSInteger sizeOfFunctionNameInBytes = [[NSString stringWithFormat:@"%@ (", [self paddingFunctionName]] lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    NSInteger sizeOfParenthesisInBytes = [@")\n" lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    NSRange paddingInsetRange = NSMakeRange(sizeOfFunctionNameInBytes, [data length] - sizeOfParenthesisInBytes - sizeOfFunctionNameInBytes);
+    
+    if ([data length] <= (sizeOfFunctionNameInBytes + sizeOfParenthesisInBytes))
+        return NO;
+
+    NSData *dataWithPaddingElided = [data subdataWithRange:paddingInsetRange];
+    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:dataWithPaddingElided options:0 error:error];
     
     if (IsEmpty(newRiver))
         return NO;
@@ -154,6 +164,7 @@ NSString * const TSRiverDefaultURLString = @"http://dl.dropbox.com/u/19672994/ne
         [self setUpdatedDate:[NSDate distantPast]];
         [self setFeeds:[NSArray array]];
         [self setLastError:nil];
+        [self setPaddingFunctionName:TSRiverDefaultPaddingFunctionName];
         [self setFetchQueue:[[NSOperationQueue alloc] init]];
         [[self fetchQueue] setName:@"TSRiverFetchQueue"];
     }
