@@ -50,6 +50,7 @@ extern NSString * const TSRiverDefaultURLString;
 @property (nonatomic, readonly, getter=isRefreshing) BOOL refreshing;
 
 - (id)initWithURL:(NSURL *)url;
+- (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
 - (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 - (void)refreshWithCompletionHandler:(void (^)(NSError *error))handler;
 

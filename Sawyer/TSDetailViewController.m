@@ -10,6 +10,8 @@
 
 @interface TSDetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
+@property (strong, nonatomic) TSRiverItem *riverItem;
+@property (strong, nonatomic) TSRiverFeed *riverFeed;
 - (void)configureView;
 @end
 
@@ -17,11 +19,11 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(TSRiverItem *)newDetailItem
+- (void)setDetailItem:(TSRiverItem *)detailItem feed:(TSRiverFeed *)feed;
 {
-    if (_riverItem != newDetailItem) {
-        _riverItem = newDetailItem;
-        
+    if ([self riverItem] != detailItem || [self riverFeed] != feed) {
+        [self setRiverItem:detailItem];
+        [self setRiverFeed:feed];
         [self configureView];
     }
 
@@ -33,7 +35,12 @@
 
 - (void)configureView
 {
-    if (self.riverItem == nil) {
+    if (IsEmpty([self riverFeed]))
+        [self setTitle:NSLocalizedString(@"Detail", nil)];
+    else
+        [self setTitle:[[self riverFeed] title]];
+    
+    if (IsEmpty([self riverItem])) {
         [[self noContentSelectedLabel] setHidden:NO];
         [[self detailEnclosingView] setHidden:YES];
         return;

@@ -11,8 +11,6 @@
 
 @interface TSDetailViewController : UIViewController <UISplitViewControllerDelegate>
 
-@property (strong, nonatomic) TSRiverItem *riverItem;
-
 @property (weak, nonatomic) IBOutlet UIView *detailEnclosingView;
 @property (weak, nonatomic) IBOutlet UIButton *linkButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -20,6 +18,5 @@
 @property (weak, nonatomic) IBOutlet UITextView *body;
 @property (weak, nonatomic) IBOutlet UILabel *noContentSelectedLabel;
 
-- (void)setDetailItem:(TSRiverItem *)newDetailItem;
-
+- (void)setDetailItem:(TSRiverItem *)detailItem feed:(TSRiverFeed *)feed;
 @end
