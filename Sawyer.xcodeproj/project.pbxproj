@@ -43,6 +43,7 @@
 		5242705B1760F52000DF3CFE /* ZYInstapaperActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270471760F52000DF3CFE /* ZYInstapaperActivity.m */; };
 		5242705C1760F52000DF3CFE /* ZYInstapaperActivityItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270491760F52000DF3CFE /* ZYInstapaperActivityItem.m */; };
 		5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5242705D1760F55E00DF3CFE /* Security.framework */; };
+		5242706017610A5D00DF3CFE /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5242705F17610A5D00DF3CFE /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		524270481760F52000DF3CFE /* ZYInstapaperActivityItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYInstapaperActivityItem.h; sourceTree = "<group>"; };
 		524270491760F52000DF3CFE /* ZYInstapaperActivityItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYInstapaperActivityItem.m; sourceTree = "<group>"; };
 		5242705D1760F55E00DF3CFE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		5242705F17610A5D00DF3CFE /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 				29649CDC175F7B7B005C4466 /* Default.png */,
 				29649CDE175F7B7B005C4466 /* Default@2x.png */,
 				29649CE0175F7B7B005C4466 /* Default-568h@2x.png */,
+				5242705F17610A5D00DF3CFE /* Settings.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				524270561760F52000DF3CFE /* ZYAddItemViewController-iPad.xib in Resources */,
 				524270581760F52000DF3CFE /* ZYAddItemViewController.xib in Resources */,
 				5242705A1760F52000DF3CFE /* ZYCredentialsViewController.xib in Resources */,
+				5242706017610A5D00DF3CFE /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

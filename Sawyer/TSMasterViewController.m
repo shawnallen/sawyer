@@ -14,7 +14,10 @@
 @interface TSMasterViewController ()
 
 @property (nonatomic) TSRiver *river;
+@property (nonatomic) id settingsObserver;
 
+- (TSRiverFeed *)feedForSection:(NSInteger)section;
+- (BOOL)prepareRiver;
 - (IBAction)refreshRiver;
 
 @end
@@ -24,9 +27,37 @@
 #pragma mark -
 #pragma mark Class extension
 
+- (TSRiverFeed *)feedForSection:(NSInteger)section;
+{
+    return [[self river] feeds][section];
+}
+
+- (BOOL)prepareRiver;
+{
+    NSString *riverURLString = [[NSUserDefaults standardUserDefaults] valueForKey:@"river_url"];
+    
+    if (IsEmpty(riverURLString)) {
+        [[NSUserDefaults standardUserDefaults] setValue:TSRiverDefaultURLString forKey:@"river_url"];
+        riverURLString = TSRiverDefaultURLString;
+    }
+    
+    NSURL *riverURL = [NSURL URLWithString:riverURLString];
+    
+    if (riverURL == nil) {
+        ALog(@"User-specified river is an invalid URL");
+        riverURL = [NSURL URLWithString:TSRiverDefaultURLString];
+    }
+    
+    if ([self river] != nil && [[[self river] url] isEqual:riverURL])
+        return NO;
+    
+    [self setRiver:[[TSRiver alloc] initWithURL:riverURL]];
+    return YES;
+}
+
 - (void)refreshRiver;
 {
-    if ([[self river] isRefreshing])
+    if ([self river] == nil || [[self river] isRefreshing])
         return;
     
     [[self refreshControl] beginRefreshing];
@@ -38,8 +69,8 @@
         [[self refreshControl] setAttributedTitle:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:NSLocalizedString(@"Last updated at %@", nil), localizedDateString]]];
         
         if (error != nil) {
-            ALog(@"%@", error);
-            return;
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[error description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+            DLog(@"%@", error);
         };
         
         [[self tableView] reloadData];
@@ -67,13 +98,20 @@
     [self setRefreshControl:[[UIRefreshControl alloc] init]];
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
-    [self setRiver:[[TSRiver alloc] init]];
-    [self refreshRiver];
+
+    if ([self prepareRiver] == YES)
+        [self refreshRiver];
+
+    [self setSettingsObserver:[[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        if ([self prepareRiver] == YES)
+            [self refreshRiver];
+    }]];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    [[NSNotificationCenter defaultCenter] removeObserver:[self settingsObserver]];
     [self setRiver:nil];
 }
 
@@ -95,8 +133,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    TSRiverFeed *feed = [[self river] feeds][section];
-    return [[feed items] count];
+    return [[[self feedForSection:section] items] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -111,7 +148,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 {
-    return [[[self river] feeds][section] title];
+
+    return [[self feedForSection:section] title];
 }
 
 #pragma mark -

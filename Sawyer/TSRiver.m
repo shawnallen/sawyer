@@ -69,8 +69,10 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     NSData *dataWithPaddingElided = [data subdataWithRange:paddingInsetRange];
     NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:dataWithPaddingElided options:0 error:error];
     
-    if (IsEmpty(newRiver))
+    if (IsEmpty(newRiver)) {
+        DLog(@"Failure deserializing river:[%@]", *error);
         return NO;
+    }
     
     NSDateFormatter *dateFormatter = [TSRiver initDateFormatter];
     
@@ -179,12 +181,20 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 
 - (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
 {
+    if ([[self feeds] count] <= [indexPath section])
+        return nil;
+    
     return [self feeds][[indexPath section]];
 }
 
 - (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 {
-    return [[[self feedForIndexPath:indexPath] items] allObjects][[indexPath row]];
+    NSArray *riverItems = [[[self feedForIndexPath:indexPath] items] allObjects];
+    
+    if ([riverItems count] <= [indexPath row])
+        return nil;
+    
+    return riverItems[[indexPath row]];
 }
 
 - (void)refreshWithCompletionHandler:(void (^)(NSError *))handler;
@@ -212,7 +222,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
             [self setRefreshing:NO];
             
             if (error != nil) {
-                handler(error);
+                handler([self lastError]);
                 return;
             }
             
@@ -224,7 +234,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
             if ([self populateRiverFromData:data error:&deserializationError] == NO)
                 [self setLastError:deserializationError];
             
-            handler(error);
+            handler([self lastError]);
         }];
     }];
 }
