@@ -3,7 +3,12 @@ Sawyer, a River2 reader for iPad, iPhone, and iPod touch on iOS 6.1 or greater.
 
 I decided to create, in a few hours (~4), a reference application to experiment with aspects of the iOS SDK which I don't get a chance to mess around with on a daily basis.  This application uses Storyboards, the UIActivityViewController, and whatever I happen to find compelling to extend the app itself with.  As of yet, this is neither production ready or conformant to my personal coding style.
 
-The default feed points to Dave Winer's personal River, which you may change by visiting Settings.
+The default feed points to Dave Winer's personal River, which you may change by visiting Settings.  I'm not doing any effort to avoid odd encodings, so if the JSONP has an unescaped sequence, you're dead in the water.
+
+Recent Changes
+========
+
+6/7/13 - Added a "Twain" button to scroll to the high-water mark to which the user last manually refreshed.  There is also a visual cue in the section which contains this high-water mark.  My intention is to push that place into iCloud, for coherency across devices.
 
 Screenshots
 ========
