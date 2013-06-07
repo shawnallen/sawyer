@@ -22,10 +22,12 @@
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
 
 - (BOOL)isWatermarkAtSection:(NSInteger)section;
-- (void)revalidateWatermark;
+- (NSIndexPath *)recalculateWatermark;
+- (void)invalidateWatermark;
 - (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
 - (void)prepareWatermarkView;
 - (IBAction)refreshRiver;
+- (IBAction)showTwain:(id)sender;
 
 @end
 
@@ -57,26 +59,37 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 
 - (BOOL)isWatermarkAtSection:(NSInteger)section;
 {
-    if (section == 0 || IsEmpty([self highWatermarkIdentifier]))
+    if (section <= 0)
         return NO;
     
     if ([self watermarkIndexPath] != nil)
         return [[self watermarkIndexPath] section] == section;
     
+    return [[self recalculateWatermark] section] == section;
+}
+
+- (NSIndexPath *)recalculateWatermark;
+{
+    NSIndexPath *watermarkIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];  // we do not have a watermark, but we need to not recalculate until that is invalidated
+    
+    if (IsEmpty([self highWatermarkIdentifier])) {
+        [self setWatermarkIndexPath:watermarkIndexPath];
+        return watermarkIndexPath;
+    }
+        
     TSRiverItem *watermarkItem = [[self river] itemForIdentifier:[self highWatermarkIdentifier]];
     
     if (watermarkItem == nil) {
-        [self setWatermarkIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];  // we do not have a watermark, but we need to not recalculate until that is invalidated
-        return NO;
+        [self setWatermarkIndexPath:watermarkIndexPath];
+        return watermarkIndexPath;
     }
     
-    NSIndexPath *watermarkIndexPath = [[self river] indexPathForItem:watermarkItem];
-    [self setWatermarkIndexPath:watermarkIndexPath];  // invalidated only in revalidateWatermark
-    
-    return [watermarkIndexPath section] == section;
+    watermarkIndexPath = [[self river] indexPathForItem:watermarkItem];
+    [self setWatermarkIndexPath:watermarkIndexPath];  // permuted again only in invalidateWatermark
+    return watermarkIndexPath;
 }
 
-- (void)revalidateWatermark;
+- (void)invalidateWatermark;
 {
     [self setWatermarkIndexPath:nil];
 }
@@ -138,6 +151,16 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     }];
 }
 
+- (IBAction)showTwain:(id)sender
+{
+    NSIndexPath *watermarkIndexPath = [self recalculateWatermark];
+    
+    if (watermarkIndexPath == nil || [[self tableView] numberOfSections] == 0)
+        return;
+    
+    [[self tableView] scrollToRowAtIndexPath:[self watermarkIndexPath] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
+
 #pragma mark -
 #pragma mark NSObject
 
@@ -168,6 +191,8 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
         if ([self prepareRiver] == YES)
             [self refreshRiver];
     }]];
+    
+    [[self tableView] setSectionIndexMinimumDisplayRowCount:1];
 }
 
 - (void)didReceiveMemoryWarning
@@ -240,7 +265,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     if (watermarkView == nil)
         watermarkView = [self watermarkView];
     
-    [self revalidateWatermark];
+    [self invalidateWatermark];
     return watermarkView;
 }
 

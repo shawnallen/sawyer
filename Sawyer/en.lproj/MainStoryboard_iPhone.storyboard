@@ -89,7 +89,13 @@
                             <outlet property="delegate" destination="12" id="15"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Sawyer" id="36"/>
+                    <navigationItem key="navigationItem" title="Sawyer" id="36">
+                        <barButtonItem key="rightBarButtonItem" title="Twain" id="cUU-3u-u6Q">
+                            <connections>
+                                <action selector="showTwain:" destination="12" id="Cyj-5X-0J1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17" sceneMemberID="firstResponder"/>
             </objects>
@@ -271,6 +277,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TSMasterViewController.h"/>
             <relationships>
                 <relationship kind="action" name="refreshRiver"/>
+                <relationship kind="action" name="showTwain:"/>
             </relationships>
         </class>
         <class className="TSWebViewController" superclassName="UIViewController">

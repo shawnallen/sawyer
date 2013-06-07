@@ -276,7 +276,13 @@
                             <outlet property="delegate" destination="19" id="21"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Sawyer" id="40"/>
+                    <navigationItem key="navigationItem" title="Sawyer" id="40">
+                        <barButtonItem key="rightBarButtonItem" title="Twain" id="Lbc-AV-7w5">
+                            <connections>
+                                <action selector="showTwain:" destination="19" id="djz-Ml-7SZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="23" sceneMemberID="firstResponder"/>
             </objects>
@@ -298,45 +304,6 @@
             <point key="canvasLocation" x="-366" y="248"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="TSDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="showActions:"/>
-                <relationship kind="action" name="showFeedWebsite:"/>
-                <relationship kind="outlet" name="body" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="detailEnclosingView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="feedTitleButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="linkButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="noContentSelectedLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="publishedDate" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSFeedItemTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSFeedItemTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="body" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="date" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="title" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSMasterViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSMasterViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="refreshRiver"/>
-            </relationships>
-        </class>
-        <class className="TSWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWebViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
