@@ -23,7 +23,7 @@
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *description;
 @property (nonatomic) NSDate *updatedDate;
-@property (nonatomic) NSSet *items;
+@property (nonatomic) NSArray *items;
 
 @end
 
@@ -51,7 +51,10 @@ extern NSString * const TSRiverDefaultURLString;
 
 - (id)initWithURL:(NSURL *)url;
 - (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
+- (TSRiverFeed *)feedForSection:(NSInteger)section;
+- (TSRiverItem *)itemForIdentifier:(NSString *)identifier;
 - (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
 - (void)refreshWithCompletionHandler:(void (^)(NSError *error))handler;
 
 @end

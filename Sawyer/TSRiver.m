@@ -18,6 +18,19 @@
 
 @implementation TSRiverItem
 
+- (NSUInteger)hash;
+{
+    return [self identifier] == nil ? (NSUInteger)self : [[self identifier] hash];
+}
+
+- (BOOL)isEqual:(id)other;
+{
+    if ([other isKindOfClass:[self class]] == NO)
+        return NO;
+    
+    return [self hash] == [other hash];
+}
+
 @end
 
 NSString * const TSRiverDefaultURLString = @"http://static.scripting.com/river3/rivers/iowa.js";
@@ -102,7 +115,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
         if (IsEmpty(whenLastUpdateString) == NO)
             [newFeed setUpdatedDate:[dateFormatter dateFromString:whenLastUpdateString]];
         
-        NSMutableSet *newItems = [NSMutableSet setWithCapacity:[feed[@"item"] count]];
+        NSMutableArray *newItems = [NSMutableArray arrayWithCapacity:[feed[@"item"] count]];
         
         for (NSDictionary *item in feed[@"item"]) {
             TSRiverItem *newItem = [[TSRiverItem alloc] init];
@@ -187,14 +200,51 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     return [self feeds][[indexPath section]];
 }
 
+- (TSRiverFeed *)feedForSection:(NSInteger)section;
+{
+    return [self feeds][section];
+}
+
+- (TSRiverItem *)itemForIdentifier:(NSString *)identifier;
+{
+    if (IsEmpty(identifier))
+        return nil;
+    
+    for (TSRiverFeed *feed in [self feeds]) {
+        for (TSRiverItem *item in [feed items]) {
+            if ([[item identifier] isEqualToString:identifier])
+                return item;
+        }
+    }
+    
+    return nil;
+}
+
 - (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
 {
-    NSArray *riverItems = [[[self feedForIndexPath:indexPath] items] allObjects];
+    NSArray *riverItems = [[self feedForIndexPath:indexPath] items];
     
     if ([riverItems count] <= [indexPath row])
         return nil;
     
     return riverItems[[indexPath row]];
+}
+
+- (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
+{
+    if (item == nil)
+        return nil;
+
+    for (int feedIndex = 0; feedIndex < [[self feeds] count]; feedIndex++) {
+        NSInteger itemIndex = [[[self feeds][feedIndex] items] indexOfObject:item];
+        
+        if (itemIndex == NSNotFound)
+            continue;
+        
+        return [NSIndexPath indexPathForRow:itemIndex inSection:feedIndex];
+    }
+    
+    return nil;
 }
 
 - (void)refreshWithCompletionHandler:(void (^)(NSError *))handler;

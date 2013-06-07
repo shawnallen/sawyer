@@ -11,13 +11,20 @@
 #import "TSRiver.h"
 #import "TSFeedItemTableViewCell.h"
 
-@interface TSMasterViewController ()
+@interface TSMasterViewController () {
+    NSString *_highWatermarkIdentifier;
+}
 
+@property (nonatomic) NSString *highWatermarkIdentifier;
 @property (nonatomic) TSRiver *river;
 @property (nonatomic) id settingsObserver;
+@property (nonatomic) UITableViewHeaderFooterView *watermarkView;
+@property (nonatomic) NSIndexPath *watermarkIndexPath;
 
-- (TSRiverFeed *)feedForSection:(NSInteger)section;
-- (BOOL)prepareRiver;
+- (BOOL)isWatermarkAtSection:(NSInteger)section;
+- (void)revalidateWatermark;
+- (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
+- (void)prepareWatermarkView;
 - (IBAction)refreshRiver;
 
 @end
@@ -27,9 +34,51 @@
 #pragma mark -
 #pragma mark Class extension
 
-- (TSRiverFeed *)feedForSection:(NSInteger)section;
+@dynamic highWatermarkIdentifier;
+
+NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
+NSString * const kWatermarkReuseIdentifier = @"Watermark";
+
+- (NSString *)highWatermarkIdentifier
 {
-    return [[self river] feeds][section];
+    if (_highWatermarkIdentifier == nil)
+        _highWatermarkIdentifier = [[NSUserDefaults standardUserDefaults] stringForKey:kHighWatermarkIdentifierKey];
+
+    return _highWatermarkIdentifier;
+}
+
+- (void)setHighWatermarkIdentifier:(NSString *)highWatermarkIdentifier;
+{
+    [[NSUserDefaults standardUserDefaults] setValue:highWatermarkIdentifier forKey:kHighWatermarkIdentifierKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    _highWatermarkIdentifier = highWatermarkIdentifier;
+}
+
+- (BOOL)isWatermarkAtSection:(NSInteger)section;
+{
+    if (section == 0 || IsEmpty([self highWatermarkIdentifier]))
+        return NO;
+    
+    if ([self watermarkIndexPath] != nil)
+        return [[self watermarkIndexPath] section] == section;
+    
+    TSRiverItem *watermarkItem = [[self river] itemForIdentifier:[self highWatermarkIdentifier]];
+    
+    if (watermarkItem == nil) {
+        [self setWatermarkIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];  // we do not have a watermark, but we need to not recalculate until that is invalidated
+        return NO;
+    }
+    
+    NSIndexPath *watermarkIndexPath = [[self river] indexPathForItem:watermarkItem];
+    [self setWatermarkIndexPath:watermarkIndexPath];  // invalidated only in revalidateWatermark
+    
+    return [watermarkIndexPath section] == section;
+}
+
+- (void)revalidateWatermark;
+{
+    [self setWatermarkIndexPath:nil];
 }
 
 - (BOOL)prepareRiver;
@@ -55,6 +104,13 @@
     return YES;
 }
 
+- (void)prepareWatermarkView;
+{
+    [self setWatermarkView:[[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:kWatermarkReuseIdentifier]];
+    [[self watermarkView] setBounds:CGRectMake(0, 0, 0, 10)];
+    [[self watermarkView] setTintColor:[UIColor colorWithRed:54.0/255.0 green:67.0/255.0 blue:149.0/255.0 alpha:1]];
+}
+
 - (void)refreshRiver;
 {
     if ([self river] == nil || [[self river] isRefreshing])
@@ -62,6 +118,11 @@
     
     [[self refreshControl] beginRefreshing];
     [[self refreshControl] setAttributedTitle:[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Refreshing...", nil)]];
+    
+    NSString *highWatermarkIdentifier = [[[self river] itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
+    
+    if (IsEmpty(highWatermarkIdentifier) == NO)
+        [self setHighWatermarkIdentifier:highWatermarkIdentifier];
     
     [[self river] refreshWithCompletionHandler:^(NSError *error) {
         [[self refreshControl] endRefreshing];
@@ -95,6 +156,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self prepareWatermarkView];
     [self setRefreshControl:[[UIRefreshControl alloc] init]];
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
@@ -133,7 +195,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[self feedForSection:section] items] count];
+    return [[[[self river] feedForSection:section] items] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -148,8 +210,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 {
-
-    return [[self feedForSection:section] title];
+    return [[[self river] feedForSection:section] title];
 }
 
 #pragma mark -
@@ -159,6 +220,28 @@
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         [[self detailViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+{
+    if ([self isWatermarkAtSection:section])
+        return CGRectGetHeight([[self watermarkView] bounds]);
+    
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
+{
+    if ([self isWatermarkAtSection:section] == NO)
+        return nil;
+    
+    UITableViewHeaderFooterView *watermarkView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kWatermarkReuseIdentifier];
+    
+    if (watermarkView == nil)
+        watermarkView = [self watermarkView];
+    
+    [self revalidateWatermark];
+    return watermarkView;
 }
 
 @end
