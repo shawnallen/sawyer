@@ -54,6 +54,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     [[NSUserDefaults standardUserDefaults] setValue:highWatermarkIdentifier forKey:kHighWatermarkIdentifierKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
+    [self invalidateWatermark];
     _highWatermarkIdentifier = highWatermarkIdentifier;
 }
 
