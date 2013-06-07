@@ -11,6 +11,7 @@
 
 @interface TSDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIView *detailEnclosingView;
+@property (weak, nonatomic) IBOutlet UIButton *feedTitleButton;
 @property (weak, nonatomic) IBOutlet UIButton *linkButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *publishedDate;
@@ -30,10 +31,13 @@
 
 - (void)configureView
 {
-    if (IsEmpty([self riverFeed]))
+    if (IsEmpty([self riverFeed])) {
+        [[self feedTitleButton] setTitle:NSLocalizedString(@"", nil) forState:UIControlStateNormal];
         [self setTitle:NSLocalizedString(@"", nil)];
-    else
-        [self setTitle:[[self riverFeed] title]];
+    } else {
+        [[self feedTitleButton] setTitle:[[self riverFeed] title] forState:UIControlStateNormal];
+        [self setTitle:NSLocalizedString(@"Item", nil)];
+    }
     
     if (IsEmpty([self riverItem])) {
         [[self noContentSelectedLabel] setHidden:NO];
@@ -99,6 +103,10 @@
 {
     if ([[segue identifier] isEqualToString:@"showLink"]) {
         [[segue destinationViewController] setLink:[[self riverItem] link]];
+    }
+    
+    if ([[segue identifier] isEqualToString:@"showFeedWebsite"]) {
+        [[segue destinationViewController] setLink:[[self riverFeed] website]];
     }
 }
 

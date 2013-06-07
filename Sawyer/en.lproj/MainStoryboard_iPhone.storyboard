@@ -105,13 +105,16 @@
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="249" translatesAutoresizingMaskIntoConstraints="NO" id="YtB-TM-Nen">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="96" id="g8f-Sq-cGN"/>
+                                    <constraint firstAttribute="height" constant="96" id="Rpk-5Q-o1P"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Body" translatesAutoresizingMaskIntoConstraints="NO" id="APk-oA-zYc">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="QFP-Nq-myz"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
@@ -149,21 +152,39 @@
                                     <segue destination="bkh-Fd-oOi" kind="push" identifier="showLink" id="bqB-MT-ezt"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZO-Kv-Zoj">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="igW-UQ-EcW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Feed Title">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" red="0.0" green="0.25098040699958801" blue="0.50196081399917603" alpha="0.51000000000000001" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="bkh-Fd-oOi" kind="push" identifier="showFeedWebsite" id="eRM-bG-KjH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="APk-oA-zYc" firstAttribute="top" secondItem="UFc-OR-drF" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="19d-br-DDG"/>
-                            <constraint firstItem="YtB-TM-Nen" firstAttribute="top" secondItem="22" secondAttribute="top" constant="20" symbolic="YES" type="default" id="3J3-vu-1ho"/>
                             <constraint firstItem="APk-oA-zYc" firstAttribute="leading" secondItem="22" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="7kC-cW-SAJ"/>
                             <constraint firstAttribute="trailing" secondItem="APk-oA-zYc" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="ASh-ow-zjJ"/>
+                            <constraint firstAttribute="trailing" secondItem="oZO-Kv-Zoj" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="ArT-2d-qiC"/>
                             <constraint firstItem="YtB-TM-Nen" firstAttribute="centerY" secondItem="RJg-dJ-I5q" secondAttribute="centerY" type="default" id="Axt-Lh-nrA"/>
                             <constraint firstItem="UFc-OR-drF" firstAttribute="top" secondItem="YtB-TM-Nen" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Blc-Sl-0cA"/>
-                            <constraint firstAttribute="bottom" secondItem="APk-oA-zYc" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="Qhr-HX-BZi"/>
+                            <constraint firstItem="oZO-Kv-Zoj" firstAttribute="top" secondItem="22" secondAttribute="top" constant="20" symbolic="YES" type="default" id="RgA-0P-KrF"/>
                             <constraint firstItem="Nse-G9-oGp" firstAttribute="baseline" secondItem="UFc-OR-drF" secondAttribute="baseline" type="default" id="S0S-L2-h18"/>
                             <constraint firstItem="YtB-TM-Nen" firstAttribute="leading" secondItem="22" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="dG8-MZ-aDF"/>
                             <constraint firstItem="Nse-G9-oGp" firstAttribute="top" secondItem="YtB-TM-Nen" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="eJs-pI-S7I"/>
+                            <constraint firstItem="oZO-Kv-Zoj" firstAttribute="leading" secondItem="22" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="fHx-su-H0f"/>
                             <constraint firstAttribute="trailing" secondItem="RJg-dJ-I5q" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="iMF-d9-PiB"/>
                             <constraint firstItem="RJg-dJ-I5q" firstAttribute="leading" secondItem="YtB-TM-Nen" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="kac-7T-itZ"/>
+                            <constraint firstItem="YtB-TM-Nen" firstAttribute="top" secondItem="22" secondAttribute="top" constant="65" id="pxE-sg-jRT"/>
                             <constraint firstItem="UFc-OR-drF" firstAttribute="leading" secondItem="22" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="q6r-BR-17g"/>
                             <constraint firstAttribute="trailing" secondItem="Nse-G9-oGp" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="tgo-BI-djH"/>
                         </constraints>
@@ -177,6 +198,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="body" destination="APk-oA-zYc" id="3Sg-jz-nTo"/>
+                        <outlet property="feedTitleButton" destination="oZO-Kv-Zoj" id="Ngv-Yv-St6"/>
                         <outlet property="linkButton" destination="RJg-dJ-I5q" id="vVe-Cg-9hF"/>
                         <outlet property="publishedDate" destination="Nse-G9-oGp" id="IMB-mS-eUI"/>
                         <outlet property="titleLabel" destination="YtB-TM-Nen" id="ZnI-Nv-5ge"/>
@@ -220,9 +242,50 @@
             <point key="canvasLocation" x="1064" y="-22"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="TSDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="showActions:"/>
+                <relationship kind="outlet" name="body" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="detailEnclosingView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="feedTitleButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="linkButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="noContentSelectedLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="publishedDate" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="TSFeedItemTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSFeedItemTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="body" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="date" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="title" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="TSMasterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSMasterViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="refreshRiver"/>
+            </relationships>
+        </class>
+        <class className="TSWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWebViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="eRM-bG-KjH"/>
+    </inferredMetricsTieBreakers>
 </document>
