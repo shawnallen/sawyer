@@ -72,15 +72,10 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 
 - (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
 {
-    NSInteger sizeOfFunctionNameInBytes = [[NSString stringWithFormat:@"%@ (", [self paddingFunctionName]] lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    NSInteger sizeOfParenthesisInBytes = [@")\n" lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    NSRange paddingInsetRange = NSMakeRange(sizeOfFunctionNameInBytes, [data length] - sizeOfParenthesisInBytes - sizeOfFunctionNameInBytes);
-    
-    if ([data length] <= (sizeOfFunctionNameInBytes + sizeOfParenthesisInBytes))
-        return NO;
-
-    NSData *dataWithPaddingElided = [data subdataWithRange:paddingInsetRange];
-    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:dataWithPaddingElided options:0 error:error];
+    UIWebView *deserializationWebView = [[UIWebView alloc] init];
+    NSString *riverJavaScript = [NSString stringWithFormat:@"function %@(river){return JSON.stringify(river);};%@;", self.paddingFunctionName, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    NSString *riverResult = [deserializationWebView stringByEvaluatingJavaScriptFromString:riverJavaScript];
+    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:[riverResult dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] options:0 error:error];
     
     if (IsEmpty(newRiver)) {
         DLog(@"Failure deserializing river:[%@]", *error);
