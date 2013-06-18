@@ -66,7 +66,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-    [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss z"];
+    [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss zzz"];
     return dateFormatter;
 }
 
@@ -152,6 +152,8 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
             [newItem setIdentifier:item[@"id"]];
             [newItems addObject:newItem];
         }
+        
+        [newItems sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"publicationDate" ascending:NO]]];
         
         [newFeed setItems:newItems];
         [newFeeds addObject:newFeed];

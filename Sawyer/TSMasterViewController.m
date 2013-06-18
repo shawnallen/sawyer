@@ -18,14 +18,10 @@
 @property (nonatomic) NSString *highWatermarkIdentifier;
 @property (nonatomic) TSRiver *river;
 @property (nonatomic) id settingsObserver;
-@property (nonatomic) UITableViewHeaderFooterView *watermarkView;
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
 
-- (BOOL)isWatermarkAtSection:(NSInteger)section;
 - (NSIndexPath *)recalculateWatermark;
-- (void)invalidateWatermark;
 - (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
-- (void)prepareWatermarkView;
 - (IBAction)refreshRiver;
 - (IBAction)showTwain:(id)sender;
 
@@ -54,19 +50,8 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     [[NSUserDefaults standardUserDefaults] setValue:highWatermarkIdentifier forKey:kHighWatermarkIdentifierKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [self invalidateWatermark];
+    [self recalculateWatermark];
     _highWatermarkIdentifier = highWatermarkIdentifier;
-}
-
-- (BOOL)isWatermarkAtSection:(NSInteger)section;
-{
-    if (section <= 0)
-        return NO;
-    
-    if ([self watermarkIndexPath] != nil)
-        return [[self watermarkIndexPath] section] == section;
-    
-    return [[self recalculateWatermark] section] == section;
 }
 
 - (NSIndexPath *)recalculateWatermark;
@@ -88,11 +73,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     watermarkIndexPath = [[self river] indexPathForItem:watermarkItem];
     [self setWatermarkIndexPath:watermarkIndexPath];  // permuted again only in invalidateWatermark
     return watermarkIndexPath;
-}
-
-- (void)invalidateWatermark;
-{
-    [self setWatermarkIndexPath:nil];
 }
 
 - (BOOL)prepareRiver;
@@ -118,13 +98,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     return YES;
 }
 
-- (void)prepareWatermarkView;
-{
-    [self setWatermarkView:[[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:kWatermarkReuseIdentifier]];
-    [[self watermarkView] setBounds:CGRectMake(0, 0, 0, 10)];
-    [[self watermarkView] setTintColor:[UIColor colorWithRed:54.0/255.0 green:67.0/255.0 blue:149.0/255.0 alpha:1]];
-}
-
 - (void)refreshRiver;
 {
     if ([self river] == nil || [[self river] isRefreshing])
@@ -148,6 +121,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
             DLog(@"%@", error);
         };
         
+        [self recalculateWatermark];
         [[self tableView] reloadData];
     }];
 }
@@ -180,7 +154,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self prepareWatermarkView];
     [self setRefreshControl:[[UIRefreshControl alloc] init]];
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
@@ -231,6 +204,22 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     cell.title.text = [item title];
     cell.body.text = [item body];
     cell.date.text = [NSDateFormatter localizedStringFromDate:[item publicationDate] dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+
+    cell.aboveWater = YES;
+    cell.highwaterMark = NO;
+    
+    if (indexPath.section == self.watermarkIndexPath.section) {
+        cell.aboveWater = indexPath.row <= self.watermarkIndexPath.row;
+
+        if (indexPath.row == self.watermarkIndexPath.row)
+            cell.highwaterMark = YES;
+        
+        return cell;
+    }
+    
+    if (indexPath.section > self.watermarkIndexPath.section)
+        cell.aboveWater = NO;
+    
     return cell;
 }
 
@@ -246,28 +235,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         [[self detailViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
-{
-    if ([self isWatermarkAtSection:section])
-        return CGRectGetHeight([[self watermarkView] bounds]);
-    
-    return 0;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
-{
-    if ([self isWatermarkAtSection:section] == NO)
-        return nil;
-    
-    UITableViewHeaderFooterView *watermarkView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kWatermarkReuseIdentifier];
-    
-    if (watermarkView == nil)
-        watermarkView = [self watermarkView];
-    
-    [self invalidateWatermark];
-    return watermarkView;
 }
 
 @end
