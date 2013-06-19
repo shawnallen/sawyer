@@ -25,7 +25,6 @@
 		2986AD81176030EB000CEC22 /* TSFeedItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */; };
 		521DCA751770B0FC00865F44 /* wave.png in Resources */ = {isa = PBXBuildFile; fileRef = 521DCA731770B0FC00865F44 /* wave.png */; };
 		521DCA761770B0FC00865F44 /* wave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 521DCA741770B0FC00865F44 /* wave@2x.png */; };
-		521DCA781770B7D500865F44 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 521DCA771770B7D500865F44 /* QuartzCore.framework */; };
 		5242704A1760F52000DF3CFE /* instapaper-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270221760F52000DF3CFE /* instapaper-ipad.png */; };
 		5242704B1760F52000DF3CFE /* instapaper-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270231760F52000DF3CFE /* instapaper-ipad@2x.png */; };
 		5242704C1760F52000DF3CFE /* instapaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270241760F52000DF3CFE /* instapaper.png */; };
@@ -119,7 +118,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				521DCA781770B7D500865F44 /* QuartzCore.framework in Frameworks */,
 				5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */,
 				29649CCB175F7B7B005C4466 /* UIKit.framework in Frameworks */,
 				29649CCD175F7B7B005C4466 /* Foundation.framework in Frameworks */,

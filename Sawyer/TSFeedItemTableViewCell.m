@@ -62,6 +62,7 @@
 {
     self.backgroundView = [[UIView alloc] initWithFrame:self.frame];
     self.backgroundView.alpha = 0.5;
+    self.backgroundView.opaque = YES;
     self.highwaterMark = NO;
     self.aboveWater = YES;
 }

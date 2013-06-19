@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="4457.6" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="3">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <development version="4600" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3682.6"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
         <scene sceneID="11">
             <objects>
                 <navigationController id="3" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -22,7 +25,7 @@
         <!--Master View Controller - Master-->
         <scene sceneID="18">
             <objects>
-                <tableViewController storyboardIdentifier="" title="Master" id="12" customClass="TSMasterViewController" sceneMemberID="viewController">
+                <tableViewController title="Master" id="12" customClass="TSMasterViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="66" sectionHeaderHeight="22" sectionFooterHeight="22" id="13">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -36,6 +39,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.89999999999999991" translatesAutoresizingMaskIntoConstraints="NO" id="WaV-aO-J48">
+                                            <rect key="frame" x="10" y="0.0" width="217" height="29"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" type="user" id="bNm-fq-1as"/>
                                                 <constraint firstAttribute="height" constant="29" id="fbj-w1-Qv8"/>
@@ -45,6 +49,7 @@
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Body" lineBreakMode="wordWrap" numberOfLines="2" minimumScaleFactor="0.79999999999999993" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="dhP-UZ-Soj">
+                                            <rect key="frame" x="20" y="27" width="280" height="34"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="34" id="SNd-sE-NAj"/>
                                             </constraints>
@@ -53,6 +58,7 @@
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="10:00 PM" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7VP-OX-ZRB">
+                                            <rect key="frame" x="235" y="0.0" width="65" height="28"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="65" id="1Nf-V4-Tnk"/>
                                             </constraints>
@@ -89,6 +95,7 @@
                             <outlet property="delegate" destination="12" id="15"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Sawyer" id="36">
                         <barButtonItem key="rightBarButtonItem" title="Twain" id="cUU-3u-u6Q">
                             <connections>
@@ -104,12 +111,13 @@
         <!--Detail View Controller - Detail-->
         <scene sceneID="24">
             <objects>
-                <viewController storyboardIdentifier="" title="Detail" id="21" customClass="TSDetailViewController" sceneMemberID="viewController">
+                <viewController title="Detail" id="21" customClass="TSDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="22">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="249" translatesAutoresizingMaskIntoConstraints="NO" id="YtB-TM-Nen">
+                                <rect key="frame" x="20" y="65" width="249" height="96"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="96" id="Rpk-5Q-o1P"/>
                                 </constraints>
@@ -118,6 +126,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Body" translatesAutoresizingMaskIntoConstraints="NO" id="APk-oA-zYc">
+                                <rect key="frame" x="20" y="198" width="280" height="240"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="240" id="QFP-Nq-myz"/>
                                 </constraints>
@@ -126,6 +135,7 @@
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
                             </textView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1/1/13 12:41 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nse-G9-oGp">
+                                <rect key="frame" x="132" y="169" width="168" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="168" id="lQT-x3-YyE"/>
                                 </constraints>
@@ -134,6 +144,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Published on:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UFc-OR-drF">
+                                <rect key="frame" x="20" y="169" width="93" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="M45-DD-JAu"/>
                                     <constraint firstAttribute="width" constant="93" id="i7f-Dn-z4A"/>
@@ -143,6 +154,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RJg-dJ-I5q">
+                                <rect key="frame" x="274" y="98" width="29" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="23" id="1uW-dk-hyM"/>
                                 </constraints>
@@ -159,6 +171,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oZO-Kv-Zoj">
+                                <rect key="frame" x="20" y="20" width="280" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="igW-UQ-EcW"/>
                                 </constraints>
@@ -195,6 +208,7 @@
                             <constraint firstAttribute="trailing" secondItem="Nse-G9-oGp" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="tgo-BI-djH"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Detail" id="26">
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="Cdv-G2-54s">
                             <connections>
@@ -223,6 +237,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0T-SJ-SFN">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
                                 <connections>
@@ -238,6 +253,7 @@
                             <constraint firstItem="e0T-SJ-SFN" firstAttribute="trailing" secondItem="42g-ON-7pY" secondAttribute="trailing" type="default" id="o6g-ZY-Qas"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="zud-Qz-Fq6"/>
                     <connections>
                         <outlet property="webView" destination="e0T-SJ-SFN" id="DCL-ex-FhE"/>
@@ -248,6 +264,45 @@
             <point key="canvasLocation" x="1064" y="-22"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="TSDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="showActions:"/>
+                <relationship kind="outlet" name="body" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="detailEnclosingView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="feedTitleButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="linkButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="noContentSelectedLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="publishedDate" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="TSFeedItemTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSFeedItemTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="body" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="date" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="title" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="TSMasterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSMasterViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="refreshRiver"/>
+                <relationship kind="action" name="showTwain:"/>
+            </relationships>
+        </class>
+        <class className="TSWebViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWebViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
