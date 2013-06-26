@@ -59,7 +59,7 @@
         return;
     
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[[self riverItem] link]] applicationActivities:@[[[ZYInstapaperActivity alloc] init]]];
-    [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypePrint]];
+    [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypePrint, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo]];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];

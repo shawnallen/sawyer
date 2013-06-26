@@ -73,6 +73,7 @@
 		2986AD7D17602C71000CEC22 /* TSWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWebViewController.m; sourceTree = "<group>"; };
 		2986AD7F176030EB000CEC22 /* TSFeedItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSFeedItemTableViewCell.h; sourceTree = "<group>"; };
 		2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSFeedItemTableViewCell.m; sourceTree = "<group>"; };
+		521FEBCC177B4D51005B4D12 /* Sawyer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Sawyer.entitlements; sourceTree = "<group>"; };
 		524270221760F52000DF3CFE /* instapaper-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad.png"; sourceTree = "<group>"; };
 		524270231760F52000DF3CFE /* instapaper-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad@2x.png"; sourceTree = "<group>"; };
 		524270241760F52000DF3CFE /* instapaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instapaper.png; sourceTree = "<group>"; };
@@ -154,6 +155,7 @@
 		29649CD0175F7B7B005C4466 /* Sawyer */ = {
 			isa = PBXGroup;
 			children = (
+				521FEBCC177B4D51005B4D12 /* Sawyer.entitlements */,
 				2986AD7C17602C71000CEC22 /* TSWebViewController.h */,
 				2986AD7D17602C71000CEC22 /* TSWebViewController.m */,
 				2983E88C175FC04C00B0657A /* TSRiver.h */,
@@ -345,6 +347,16 @@
 				CLASSPREFIX = TS;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Sotto, LLC";
+				TargetAttributes = {
+					29649CC6175F7B7B005C4466 = {
+						DevelopmentTeam = SVLUY7HCQ7;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = 29649CC2175F7B7B005C4466 /* Build configuration list for PBXProject "Sawyer" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -505,9 +517,12 @@
 		29649CF1175F7B7B005C4466 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sawyer/Sawyer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -516,9 +531,12 @@
 		29649CF2175F7B7B005C4466 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sawyer/Sawyer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
