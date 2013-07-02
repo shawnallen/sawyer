@@ -10,8 +10,7 @@
 
 #import "ZYAddItemsViewController.h"
 
-@interface ZYAddItemsViewController () <
-    UITableViewDataSource, UITableViewDelegate>
+@interface ZYAddItemsViewController ()
 
 @property (strong, nonatomic) NSArray *activityItems;
 @property (strong, nonatomic) NSMutableArray *selectedActivityItems;
