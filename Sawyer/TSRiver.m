@@ -66,21 +66,16 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-    [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss z"];
+    [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss zzz"];
     return dateFormatter;
 }
 
 - (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
 {
-    NSInteger sizeOfFunctionNameInBytes = [[NSString stringWithFormat:@"%@ (", [self paddingFunctionName]] lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    NSInteger sizeOfParenthesisInBytes = [@")\n" lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    NSRange paddingInsetRange = NSMakeRange(sizeOfFunctionNameInBytes, [data length] - sizeOfParenthesisInBytes - sizeOfFunctionNameInBytes);
-    
-    if ([data length] <= (sizeOfFunctionNameInBytes + sizeOfParenthesisInBytes))
-        return NO;
-
-    NSData *dataWithPaddingElided = [data subdataWithRange:paddingInsetRange];
-    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:dataWithPaddingElided options:0 error:error];
+    UIWebView *deserializationWebView = [[UIWebView alloc] init];
+    NSString *riverJavaScript = [NSString stringWithFormat:@"function %@(river){return JSON.stringify(river);};%@;", self.paddingFunctionName, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    NSString *riverResult = [deserializationWebView stringByEvaluatingJavaScriptFromString:riverJavaScript];
+    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:[riverResult dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] options:0 error:error];
     
     if (IsEmpty(newRiver)) {
         DLog(@"Failure deserializing river:[%@]", *error);
@@ -157,6 +152,8 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
             [newItem setIdentifier:item[@"id"]];
             [newItems addObject:newItem];
         }
+        
+        [newItems sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"publicationDate" ascending:NO]]];
         
         [newFeed setItems:newItems];
         [newFeeds addObject:newFeed];

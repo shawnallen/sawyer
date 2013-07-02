@@ -10,20 +10,61 @@
 
 @implementation TSFeedItemTableViewCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+#pragma mark -
+#pragma mark API
+
+- (void)setAboveWater:(BOOL)aboveWater;
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
+    if (_aboveWater == aboveWater)
+        return;
+    
+    _aboveWater = aboveWater;
+    [self assertWatermarkState];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void)setHighwaterMark:(BOOL)highwaterMark;
 {
-    [super setSelected:selected animated:animated];
+    if (_highwaterMark == highwaterMark)
+        return;
+    
+    _highwaterMark = highwaterMark;
+    [self assertWatermarkState];
+}
 
-    // Configure the view for the selected state
+- (void)assertWatermarkState
+{
+    self.title.textColor = [UIColor darkTextColor];
+    self.body.textColor = [UIColor lightGrayColor];
+    
+    if (_highwaterMark) {
+        self.backgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"wave"]];
+        return;
+    }
+    
+    if (_aboveWater)
+        self.backgroundView.backgroundColor = [UIColor whiteColor];
+    else {
+        self.backgroundView.backgroundColor = [UIColor colorWithRed:203.0/255.0 green:217.0/255.0 blue:239.0/255.0 alpha:1.0];
+        self.title.textColor = [UIColor blackColor];
+        self.body.textColor = [UIColor darkTextColor];
+    }
+}
+
+- (void)prepareForReuse;
+{
+    [self assertWatermarkState];
+}
+
+#pragma mark -
+#pragma mark NSObject
+
+- (void)awakeFromNib
+{
+    self.backgroundView = [[UIView alloc] initWithFrame:self.frame];
+    self.backgroundView.alpha = 0.5;
+    self.backgroundView.opaque = YES;
+    self.highwaterMark = NO;
+    self.aboveWater = YES;
 }
 
 @end

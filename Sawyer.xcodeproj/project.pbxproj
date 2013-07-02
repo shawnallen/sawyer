@@ -23,6 +23,8 @@
 		2983E88E175FC04C00B0657A /* TSRiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2983E88D175FC04C00B0657A /* TSRiver.m */; };
 		2986AD7E17602C71000CEC22 /* TSWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2986AD7D17602C71000CEC22 /* TSWebViewController.m */; };
 		2986AD81176030EB000CEC22 /* TSFeedItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */; };
+		521DCA751770B0FC00865F44 /* wave.png in Resources */ = {isa = PBXBuildFile; fileRef = 521DCA731770B0FC00865F44 /* wave.png */; };
+		521DCA761770B0FC00865F44 /* wave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 521DCA741770B0FC00865F44 /* wave@2x.png */; };
 		5242704A1760F52000DF3CFE /* instapaper-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270221760F52000DF3CFE /* instapaper-ipad.png */; };
 		5242704B1760F52000DF3CFE /* instapaper-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270231760F52000DF3CFE /* instapaper-ipad@2x.png */; };
 		5242704C1760F52000DF3CFE /* instapaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270241760F52000DF3CFE /* instapaper.png */; };
@@ -127,6 +129,7 @@
 		29649CBE175F7B7B005C4466 = {
 			isa = PBXGroup;
 			children = (
+				521DCA771770B7D500865F44 /* QuartzCore.framework */,
 				29649CD0175F7B7B005C4466 /* Sawyer */,
 				29649CC9175F7B7B005C4466 /* Frameworks */,
 				29649CC8175F7B7B005C4466 /* Products */,
@@ -179,6 +182,8 @@
 		29649CD1175F7B7B005C4466 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				521DCA731770B0FC00865F44 /* wave.png */,
+				521DCA741770B0FC00865F44 /* wave@2x.png */,
 				2986AD7B175FE478000CEC22 /* SOPrefix.h */,
 				29649CD2175F7B7B005C4466 /* Sawyer-Info.plist */,
 				29649CD3175F7B7B005C4466 /* InfoPlist.strings */,
@@ -395,6 +400,8 @@
 				524270581760F52000DF3CFE /* ZYAddItemViewController.xib in Resources */,
 				5242705A1760F52000DF3CFE /* ZYCredentialsViewController.xib in Resources */,
 				5242706017610A5D00DF3CFE /* Settings.bundle in Resources */,
+				521DCA751770B0FC00865F44 /* wave.png in Resources */,
+				521DCA761770B0FC00865F44 /* wave@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

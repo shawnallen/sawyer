@@ -84,10 +84,11 @@
         [self configureView];
     }
 
-    if (IsEmpty([self masterPopoverController])) {
+    if ([self masterPopoverController] != nil)
         [self.masterPopoverController dismissPopoverAnimated:YES];
-        return;
-    }
+
+    if (self.navigationController.visibleViewController != self)
+        [self.navigationController popToViewController:self animated:YES];
 }
 
 #pragma mark -
