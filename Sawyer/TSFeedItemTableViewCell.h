@@ -14,7 +14,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *body;
 @property (weak, nonatomic) IBOutlet UILabel *date;
 
-@property (nonatomic) BOOL highwaterMark;
-@property (nonatomic) BOOL aboveWater;
-
 @end

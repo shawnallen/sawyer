@@ -154,7 +154,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setRefreshControl:[[UIRefreshControl alloc] init]];
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
 
@@ -204,22 +203,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     cell.title.text = [item title];
     cell.body.text = [item body];
     cell.date.text = [NSDateFormatter localizedStringFromDate:[item publicationDate] dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-
-    cell.aboveWater = YES;
-    cell.highwaterMark = NO;
-    
-    if (indexPath.section == self.watermarkIndexPath.section) {
-        cell.aboveWater = indexPath.row <= self.watermarkIndexPath.row;
-
-        if (indexPath.row == self.watermarkIndexPath.row)
-            cell.highwaterMark = YES;
-        
-        return cell;
-    }
-    
-    if (indexPath.section > self.watermarkIndexPath.section)
-        cell.aboveWater = NO;
-    
     return cell;
 }
 

@@ -8,6 +8,7 @@
 
 #import "TSDetailViewController.h"
 #import "ZYInstapaperActivity.h"
+#import "TUSafariActivity.h"
 
 @interface TSDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIView *detailEnclosingView;
@@ -58,7 +59,7 @@
     if (IsEmpty([self riverItem]))
         return;
     
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[[self riverItem] link]] applicationActivities:@[[[ZYInstapaperActivity alloc] init]]];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[[self riverItem] link]] applicationActivities:@[[ZYInstapaperActivity new], [TUSafariActivity new]]];
     [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypePrint, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo]];
     
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {

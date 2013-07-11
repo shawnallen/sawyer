@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4457.9" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4471.1" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="5">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3682.9"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3697.3"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -25,6 +25,10 @@
         <scene sceneID="16">
             <objects>
                 <viewController title="Detail" id="4" customClass="TSDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OpS-78-l1n"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ywp-DB-KFM"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="WlL-fo-7Pz">
                         <rect key="frame" x="0.0" y="64" width="703" height="704"/>
                         <subviews>
@@ -133,6 +137,10 @@
         <scene sceneID="Byp-7i-d3x">
             <objects>
                 <viewController id="cwy-Bb-cmH" customClass="TSWebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BeM-zU-X46"/>
+                        <viewControllerLayoutGuide type="bottom" id="aoo-HE-qmy"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="W33-cc-XMW">
                         <rect key="frame" x="0.0" y="64" width="703" height="704"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -185,22 +193,22 @@
         <!--Master View Controller - Master-->
         <scene sceneID="24">
             <objects>
-                <tableViewController title="Master" clearsSelectionOnViewWillAppear="NO" id="19" customClass="TSMasterViewController" sceneMemberID="viewController">
+                <tableViewController title="Master" extendedLayoutIncludesOpaqueBars="YES" id="19" customClass="TSMasterViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" id="20">
-                        <rect key="frame" x="0.0" y="64" width="320" height="704"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="63" id="kz2-kk-Nao" customClass="TSFeedItemTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="63"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="63"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="62"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kz2-kk-Nao" id="ded-Ki-pTc">
+                                    <rect key="frame" x="0.0" y="0.0" width="289" height="62"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.89999997615814209" translatesAutoresizingMaskIntoConstraints="NO" id="ofR-sX-QFr">
-                                            <rect key="frame" x="10" y="0.0" width="212" height="29"/>
+                                            <rect key="frame" x="10" y="33" width="212" height="29"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="212" id="EIU-cZ-EXf"/>
                                             </constraints>
@@ -218,25 +226,24 @@
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Body" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.90000000000000002" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="hQY-qG-mRH">
-                                            <rect key="frame" x="20" y="22" width="280" height="40"/>
+                                            <rect key="frame" x="20" y="21" width="280" height="40"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
+                                </tableViewCellContentView>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="bzi-LI-fA1" firstAttribute="leading" secondItem="ofR-sX-QFr" secondAttribute="trailing" id="12A-zP-XFt"/>
-                                    <constraint firstAttribute="bottom" secondItem="ofR-sX-QFr" secondAttribute="bottom" constant="34" id="4pV-hu-G5T"/>
-                                    <constraint firstAttribute="bottom" secondItem="hQY-qG-mRH" secondAttribute="bottom" constant="1" id="EVG-5r-coq"/>
-                                    <constraint firstAttribute="trailing" secondItem="hQY-qG-mRH" secondAttribute="trailing" constant="20" id="JDe-9x-juj"/>
-                                    <constraint firstItem="ofR-sX-QFr" firstAttribute="centerY" secondItem="bzi-LI-fA1" secondAttribute="centerY" id="RJO-65-qmB"/>
-                                    <constraint firstItem="hQY-qG-mRH" firstAttribute="leading" secondItem="kz2-kk-Nao" secondAttribute="leading" constant="20" id="Uqe-7o-pLv"/>
-                                    <constraint firstItem="ofR-sX-QFr" firstAttribute="top" secondItem="kz2-kk-Nao" secondAttribute="top" id="Z9A-44-B6n"/>
-                                    <constraint firstItem="ofR-sX-QFr" firstAttribute="leading" secondItem="kz2-kk-Nao" secondAttribute="leading" constant="10" id="dSv-Qu-Y5O"/>
-                                    <constraint firstItem="hQY-qG-mRH" firstAttribute="top" secondItem="kz2-kk-Nao" secondAttribute="top" constant="22" id="uGA-Gm-ovg"/>
+                                    <constraint firstItem="ofR-sX-QFr" firstAttribute="top" secondItem="kz2-kk-Nao" secondAttribute="top" id="8fB-Fc-4u6"/>
+                                    <constraint firstItem="hQY-qG-mRH" firstAttribute="leading" secondItem="kz2-kk-Nao" secondAttribute="leading" constant="20" id="DSb-UO-HDn"/>
+                                    <constraint firstAttribute="bottom" secondItem="hQY-qG-mRH" secondAttribute="bottom" constant="1" id="YOO-Mi-ie1"/>
+                                    <constraint firstAttribute="bottom" secondItem="ofR-sX-QFr" secondAttribute="bottom" constant="34" id="ZCv-SL-Cge"/>
+                                    <constraint firstAttribute="trailing" secondItem="hQY-qG-mRH" secondAttribute="trailing" constant="20" id="d4V-Gd-mDn"/>
+                                    <constraint firstItem="bzi-LI-fA1" firstAttribute="leading" secondItem="ofR-sX-QFr" secondAttribute="trailing" id="eVl-q4-qEW"/>
+                                    <constraint firstItem="hQY-qG-mRH" firstAttribute="top" secondItem="kz2-kk-Nao" secondAttribute="top" constant="22" id="idd-Hn-2Q3"/>
+                                    <constraint firstItem="ofR-sX-QFr" firstAttribute="centerY" secondItem="bzi-LI-fA1" secondAttribute="centerY" id="jjL-1G-PUR"/>
+                                    <constraint firstItem="ofR-sX-QFr" firstAttribute="leading" secondItem="kz2-kk-Nao" secondAttribute="leading" constant="10" id="xEe-s6-xfR"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="body" destination="hQY-qG-mRH" id="FEK-6M-EoG"/>
@@ -251,7 +258,6 @@
                             <outlet property="delegate" destination="19" id="21"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Sawyer" id="40">
                         <barButtonItem key="rightBarButtonItem" title="Twain" id="Lbc-AV-7w5">
                             <connections>
@@ -259,6 +265,10 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="WQK-aD-6HM">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <attributedString key="attributedTitle"/>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="23" sceneMemberID="firstResponder"/>
             </objects>
@@ -281,48 +291,6 @@
             <point key="canvasLocation" x="-366" y="248"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="TSDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="showActions:"/>
-                <relationship kind="outlet" name="body" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="detailEnclosingView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="feedTitleButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="linkButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="noContentSelectedLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="publishedDate" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSFeedItemTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSFeedItemTableViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="body" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="date" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="title" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="TSMasterViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSMasterViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="refreshRiver"/>
-                <relationship kind="action" name="showTwain:"/>
-            </relationships>
-        </class>
-        <class className="TSWebViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TSWebViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="backButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="forwardButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackOpaque"/>
         <simulatedOrientationMetrics key="orientation"/>
