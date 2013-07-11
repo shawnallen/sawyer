@@ -15,10 +15,12 @@
     NSString *_highWatermarkIdentifier;
 }
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *lastUpdatedButton;
 @property (nonatomic) NSString *highWatermarkIdentifier;
 @property (nonatomic) TSRiver *river;
 @property (nonatomic) id settingsObserver;
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
+@property (nonatomic) BOOL showingLastUpdated;
 
 - (NSIndexPath *)recalculateWatermark;
 - (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
@@ -71,7 +73,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     }
     
     watermarkIndexPath = [[self river] indexPathForItem:watermarkItem];
-    [self setWatermarkIndexPath:watermarkIndexPath];  // permuted again only in invalidateWatermark
+    [self setWatermarkIndexPath:watermarkIndexPath];
     return watermarkIndexPath;
 }
 
@@ -104,7 +106,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
         return;
     
     [[self refreshControl] beginRefreshing];
-    [[self refreshControl] setAttributedTitle:[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Refreshing...", nil)]];
+    self.lastUpdatedButton.title = NSLocalizedString(@"Refreshing...", nil);
     
     NSString *highWatermarkIdentifier = [[[self river] itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
     
@@ -113,8 +115,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     
     [[self river] refreshWithCompletionHandler:^(NSError *error) {
         [[self refreshControl] endRefreshing];
-        NSString *localizedDateString = [NSDateFormatter localizedStringFromDate:[[self river] updatedDate] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
-        [[self refreshControl] setAttributedTitle:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:NSLocalizedString(@"Last updated at %@", nil), localizedDateString]]];
+        [self updateDateDisplay];
         
         if (error != nil) {
             [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[error description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
@@ -128,12 +129,45 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 
 - (IBAction)showTwain:(id)sender
 {
+    if (self.isEditing) {
+        [self setEditing:NO animated:YES];
+        return;
+    }
+    
     NSIndexPath *watermarkIndexPath = [self recalculateWatermark];
     
     if (watermarkIndexPath == nil || [[self tableView] numberOfSections] == 0)
         return;
     
-    [[self tableView] scrollToRowAtIndexPath:[self watermarkIndexPath] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [[self tableView] selectRowAtIndexPath:self.watermarkIndexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+    [self performSelector:@selector(deselectTwainRow) withObject:nil afterDelay:1.0];
+}
+
+- (void)deselectTwainRow;
+{
+    [self.tableView deselectRowAtIndexPath:self.watermarkIndexPath animated:YES];
+}
+
+- (IBAction)toggleUpdatedDate:(id)sender
+{
+    self.showingLastUpdated = !self.showingLastUpdated;
+    [self updateDateDisplay];
+}
+
+- (void)updateDateDisplay
+{
+    NSString *dateTitleForDisplay;
+    
+    if (self.showingLastUpdated) {
+        NSString *localizedDateString = [NSDateFormatter localizedStringFromDate:[[self river] fetchedDate] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+        dateTitleForDisplay = [NSString stringWithFormat:NSLocalizedString(@"Last updated at %@", nil), localizedDateString];
+    } else {
+        NSString *localizedDateString = [NSDateFormatter localizedStringFromDate:[[self river] whenRiverUpdatedDate] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+        dateTitleForDisplay = [NSString stringWithFormat:NSLocalizedString(@"Feed updated at %@", nil), localizedDateString];
+    }
+    
+    self.lastUpdatedButton.title = dateTitleForDisplay;
+        
 }
 
 #pragma mark -
@@ -156,6 +190,9 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     [super viewDidLoad];
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
+    self.showingLastUpdated = YES;
+
+    [[self lastUpdatedButton] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:12.0], NSForegroundColorAttributeName : [UIColor blackColor]} forState:UIControlStateNormal];
 
     if ([self prepareRiver] == YES)
         [self refreshRiver];
@@ -181,6 +218,18 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         [(TSDetailViewController *)[segue destinationViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
     }
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated;
+{
+    [super setEditing:editing animated:animated];
+    
+    if (editing)
+        [[[self navigationItem] rightBarButtonItem] setTitle:NSLocalizedString(@"Cancel", nil)];
+    else
+        [[[self navigationItem] rightBarButtonItem] setTitle:NSLocalizedString(@"Twain", nil)];
+    
+    [[self tableView] setEditing:editing animated:animated];
 }
 
 #pragma mark -
@@ -209,6 +258,18 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 {
     return [[[self river] feedForSection:section] title];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    [self setHighWatermarkIdentifier:[self.river itemForIndexPath:indexPath].identifier];
+    [self recalculateWatermark];
+    [self performSelector:@selector(setEditing:) withObject:NO afterDelay:0.0];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    return NSLocalizedString(@"Mark Twain", nil);
 }
 
 #pragma mark -

@@ -39,12 +39,13 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 @interface TSRiver ()
 
 @property (nonatomic, readwrite) NSArray *feeds;
-@property (nonatomic, readwrite) NSDate *updatedDate;
+@property (nonatomic, readwrite) NSDate *fetchedDate;
+@property (nonatomic, readwrite) NSDate *whenRiverUpdatedDate;
 @property (nonatomic, readwrite) NSURL *url;
 @property (nonatomic, readwrite) NSURL *redirectedURL;
 @property (nonatomic, readwrite) BOOL refreshing;
 @property (nonatomic) NSString *version;
-@property (nonatomic) NSDate *whenRiverUpdatedDate;
+
 
 @property (nonatomic) NSString *paddingFunctionName;
 @property (nonatomic) NSOperationQueue *fetchQueue;
@@ -173,7 +174,8 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     
     if (self) {
         [self setUrl:url];
-        [self setUpdatedDate:[NSDate distantPast]];
+        [self setFetchedDate:[NSDate distantPast]];
+        [self setWhenRiverUpdatedDate:[NSDate distantPast]];
         [self setFeeds:[NSArray array]];
         [self setLastError:nil];
         [self setPaddingFunctionName:TSRiverDefaultPaddingFunctionName];
@@ -273,7 +275,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
                 return;
             }
             
-            [self setUpdatedDate:[NSDate date]];
+            [self setFetchedDate:[NSDate date]];
             // TODO: Set redirected URL based on the properties of the response
             
             NSError *deserializationError;
@@ -297,7 +299,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"TSRiver [(%@) updated:%@, riverUpdated:%@, version:%@]", [self url], [self updatedDate] == [NSDate distantPast] ? @"(none)" : [self updatedDate], [self whenRiverUpdatedDate] == nil ? @"(unknown)" : [self whenRiverUpdatedDate], [self version] == nil ? @"(unknown)" : [self version]];
+    return [NSString stringWithFormat:@"TSRiver [(%@) updated:%@, riverUpdated:%@, version:%@]", [self url], [self fetchedDate] == [NSDate distantPast] ? @"(none)" : [self fetchedDate], [self whenRiverUpdatedDate] == nil ? @"(unknown)" : [self whenRiverUpdatedDate], [self version] == nil ? @"(unknown)" : [self version]];
 }
 
 @end

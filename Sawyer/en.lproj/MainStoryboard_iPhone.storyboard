@@ -8,11 +8,15 @@
         <!--Navigation Controller-->
         <scene sceneID="11">
             <objects>
-                <navigationController id="3" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="3" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ul9-54-8S0">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="12" kind="relationship" relationship="rootViewController" id="19"/>
                     </connections>
@@ -25,7 +29,7 @@
         <scene sceneID="18">
             <objects>
                 <tableViewController title="Master" extendedLayoutIncludesOpaqueBars="YES" id="12" customClass="TSMasterViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="66" sectionHeaderHeight="22" sectionFooterHeight="22" id="13">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="66" sectionHeaderHeight="22" sectionFooterHeight="22" id="13">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -43,11 +47,8 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Body" lineBreakMode="wordWrap" numberOfLines="2" minimumScaleFactor="0.79999999999999993" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="517" translatesAutoresizingMaskIntoConstraints="NO" id="dhP-UZ-Soj">
-                                            <rect key="frame" x="20" y="20" width="517" height="45"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="517" id="bJy-bR-ieM"/>
-                                            </constraints>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Body" lineBreakMode="wordWrap" numberOfLines="2" minimumScaleFactor="0.79999999999999993" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="269" translatesAutoresizingMaskIntoConstraints="NO" id="dhP-UZ-Soj">
+                                            <rect key="frame" x="20" y="20" width="269" height="45"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -64,15 +65,16 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="WaV-aO-J48" firstAttribute="bottom" secondItem="7VP-OX-ZRB" secondAttribute="bottom" id="DjS-Lb-Lvl"/>
+                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="leading" secondItem="jhp-kf-A6k" secondAttribute="leading" constant="20" symbolic="YES" id="Fw1-9D-f3F"/>
                                         <constraint firstItem="WaV-aO-J48" firstAttribute="leading" secondItem="jhp-kf-A6k" secondAttribute="leading" constant="8" id="IOJ-tz-SWd"/>
+                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="bottom" secondItem="jhp-kf-A6k" secondAttribute="bottom" id="KKS-0e-Ysp"/>
                                         <constraint firstItem="7VP-OX-ZRB" firstAttribute="top" secondItem="jhp-kf-A6k" secondAttribute="top" id="Pg9-Id-sST"/>
-                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="top" secondItem="jhp-kf-A6k" secondAttribute="top" constant="20" symbolic="YES" id="Tdn-sL-riO"/>
-                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="leading" secondItem="jhp-kf-A6k" secondAttribute="leading" constant="20" symbolic="YES" id="VkP-nv-egF"/>
                                         <constraint firstItem="7VP-OX-ZRB" firstAttribute="trailing" secondItem="jhp-kf-A6k" secondAttribute="trailing" id="faX-PD-nc2"/>
-                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="bottom" secondItem="jhp-kf-A6k" secondAttribute="bottom" id="gqc-rW-hO2"/>
+                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="top" secondItem="jhp-kf-A6k" secondAttribute="top" constant="20" symbolic="YES" id="ivz-Y9-c8I"/>
                                         <constraint firstItem="WaV-aO-J48" firstAttribute="top" secondItem="jhp-kf-A6k" secondAttribute="top" constant="-1" id="n1u-DM-mVN"/>
                                         <constraint firstAttribute="bottom" secondItem="WaV-aO-J48" secondAttribute="bottom" constant="37" id="se1-dz-uKo"/>
                                         <constraint firstItem="7VP-OX-ZRB" firstAttribute="left" secondItem="WaV-aO-J48" secondAttribute="right" constant="8" symbolic="YES" id="x4B-jI-Iuy"/>
+                                        <constraint firstItem="dhP-UZ-Soj" firstAttribute="trailing" secondItem="7VP-OX-ZRB" secondAttribute="trailing" id="xjF-DZ-CxZ"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -90,6 +92,15 @@
                             <outlet property="delegate" destination="12" id="15"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem systemItem="flexibleSpace" id="gWW-x6-Wtk"/>
+                        <barButtonItem title="Item" id="34q-Za-tkO">
+                            <connections>
+                                <action selector="toggleUpdatedDate:" destination="12" id="RJf-CJ-RDi"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem systemItem="flexibleSpace" id="ZmU-E4-Sdd"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Sawyer" id="36">
                         <barButtonItem key="rightBarButtonItem" title="Twain" id="cUU-3u-u6Q">
                             <connections>
@@ -100,15 +111,18 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="azp-4g-Lrk">
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
+                    <connections>
+                        <outlet property="lastUpdatedButton" destination="34q-Za-tkO" id="u6f-3s-k3O"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="17" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="210" y="-64"/>
+            <point key="canvasLocation" x="208" y="-22"/>
         </scene>
         <!--Detail View Controller - Detail-->
         <scene sceneID="24">
             <objects>
-                <viewController title="Detail" extendedLayoutIncludesOpaqueBars="YES" id="21" customClass="TSDetailViewController" sceneMemberID="viewController">
+                <viewController title="Detail" extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="21" customClass="TSDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3qd-Ql-DhE"/>
                         <viewControllerLayoutGuide type="bottom" id="XbG-ez-JQH"/>
@@ -194,6 +208,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="body" destination="APk-oA-zYc" id="3Sg-jz-nTo"/>
                         <outlet property="feedTitleButton" destination="oZO-Kv-Zoj" id="Ngv-Yv-St6"/>

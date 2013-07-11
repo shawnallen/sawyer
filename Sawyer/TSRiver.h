@@ -44,7 +44,8 @@ extern NSString * const TSRiverDefaultURLString;
 @interface TSRiver : NSObject
 
 @property (nonatomic, readonly) NSArray *feeds;
-@property (nonatomic, readonly) NSDate *updatedDate;
+@property (nonatomic, readonly) NSDate *fetchedDate;
+@property (nonatomic, readonly) NSDate *whenRiverUpdatedDate;
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSURL *redirectedURL;
 @property (nonatomic, readonly, getter=isRefreshing) BOOL refreshing;
