@@ -81,6 +81,7 @@
 		2986AD7D17602C71000CEC22 /* TSWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWebViewController.m; sourceTree = "<group>"; };
 		2986AD7F176030EB000CEC22 /* TSFeedItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSFeedItemTableViewCell.h; sourceTree = "<group>"; };
 		2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSFeedItemTableViewCell.m; sourceTree = "<group>"; };
+		520EDA111791A0CC00DB4E4A /* TSRiverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRiverDelegate.h; sourceTree = "<group>"; };
 		521DCA731770B0FC00865F44 /* wave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wave.png; sourceTree = "<group>"; };
 		521DCA741770B0FC00865F44 /* wave@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wave@2x.png"; sourceTree = "<group>"; };
 		521DCA771770B7D500865F44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -201,6 +202,7 @@
 				29649CDA175F7B7B005C4466 /* TSAppDelegate.m */,
 				29649CE2175F7B7B005C4466 /* MainStoryboard_iPhone.storyboard */,
 				29649CE5175F7B7B005C4466 /* MainStoryboard_iPad.storyboard */,
+				520EDA111791A0CC00DB4E4A /* TSRiverDelegate.h */,
 				29649CE8175F7B7B005C4466 /* TSMasterViewController.h */,
 				29649CE9175F7B7B005C4466 /* TSMasterViewController.m */,
 				29649CEB175F7B7B005C4466 /* TSDetailViewController.h */,
@@ -405,6 +407,9 @@
 					29649CC6175F7B7B005C4466 = {
 						DevelopmentTeam = SVLUY7HCQ7;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};

@@ -10,6 +10,7 @@
 #import "TSDetailViewController.h"
 #import "TSRiver.h"
 #import "TSFeedItemTableViewCell.h"
+#import "TSAppDelegate.h"
 
 @interface TSMasterViewController () {
     NSString *_highWatermarkIdentifier;
@@ -21,6 +22,7 @@
 @property (nonatomic) id settingsObserver;
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
 @property (nonatomic) BOOL showingLastUpdated;
+@property (nonatomic) BOOL didRiverUpdateSinceLastUse;
 
 - (NSIndexPath *)recalculateWatermark;
 - (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
@@ -171,13 +173,21 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 }
 
 #pragma mark -
+#pragma mark TSRiverDelegate
+
+- (void)performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
+#pragma mark -
 #pragma mark NSObject
 
 - (void)awakeFromNib
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.clearsSelectionOnViewWillAppear = NO;
-        self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+        self.preferredContentSize = CGSizeMake(320.0, 600.0);
     }
     [super awakeFromNib];
 }
@@ -188,6 +198,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    ((TSAppDelegate *)[UIApplication sharedApplication].delegate).riverDelegate = self;
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
     self.showingLastUpdated = YES;
@@ -208,7 +219,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    [[NSNotificationCenter defaultCenter] removeObserver:[self settingsObserver]];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.settingsObserver];
     [self setRiver:nil];
 }
 

@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TSRiverDelegate.h"
 
 @interface TSAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (weak, nonatomic) id<TSRiverDelegate> riverDelegate;
 
 @end
