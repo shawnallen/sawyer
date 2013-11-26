@@ -1,13 +1,14 @@
-Sawyer, a River2 reader for iPad, iPhone, and iPod touch on iOS 6.1 or greater.
+Sawyer, a River2 and River3 reader for iPad, iPhone, and iPod touch on iOS 6.1 or greater.
 ===================
 
 I decided to create, in a few hours (~4), a reference application to experiment with aspects of the iOS SDK which I don't get a chance to mess around with on a daily basis.  This application uses Storyboards, the UIActivityViewController, and whatever I happen to find compelling to extend the app itself with.  As of yet, this is neither production ready or conformant to my personal coding style.
 
-The default feed points to Dave Winer's personal River, which you may change by visiting Settings.  There is no extra effort to decode/translate escaped literals or to process odd encodings; I did change over to use UIWebView (it'll be different in iOS 7 versions) for handling the deserialization.
+The default feed points to Dave Winer's personal River, which you may change by visiting Settings.  There is no extra effort to decode/translate escaped literals or to process odd encodings; I did change over to use UIWebView for handling the deserialization.
 
 Recent Changes
 ========
 
+7/15/13 - Updated for the minimum of iOS 7 support, and began work on iOS 7 background fetch and iCloud.  TSRiver does way too much -- so wrong.
 6/17/13 - Changed to use UIWebView for processing the JSONP.
 6/7/13 - Added a "Twain" button to scroll to the high-water mark to which the user last manually refreshed.  There is also a visual cue in the section which contains this high-water mark.  My intention is to push that place into iCloud, for coherency across devices.
 
@@ -18,12 +19,13 @@ Screenshots
 ![](https://raw.github.com/shawnallen/sawyer/master/images/item.png)
 ![](https://raw.github.com/shawnallen/sawyer/master/images/safari.png)
 
-Many thanks to Dave Winer for River2, the prescience to produce the feed in JSON, along with the OPML Editor that it sits a top of.
+Many thanks to Dave Winer for River2 and River3, the prescience to produce the feed in JSON, along with the OPML Editor that the platform sits a top of.
 
 External frameworks
 =========================
 
 * [ZYInstapaperActivity](https://github.com/marianoabdala/ZYInstapaperActivity) by [Mariano Abdala](https://github.com/marianoabdala)
+* [TUSafariActivity](https://github.com/davbeck/TUSafariActivity) by [David Beck](https://github.com/davbeck)
 
 License
 =======
