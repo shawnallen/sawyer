@@ -8,10 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class TSRiverItem;
+
 @interface TSFeedItemTableViewCell : UITableViewCell
-
-@property (weak, nonatomic) IBOutlet UILabel *title;
-@property (weak, nonatomic) IBOutlet UILabel *body;
-@property (weak, nonatomic) IBOutlet UILabel *date;
-
+@property (nonatomic) TSRiverItem *riverItem;
 @end

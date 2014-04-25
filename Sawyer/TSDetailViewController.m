@@ -7,8 +7,8 @@
 //
 
 #import "TSDetailViewController.h"
-#import "ZYInstapaperActivity.h"
-#import "TUSafariActivity.h"
+#import "TSRiver.h"
+#import "TSActivityUtilities.h"
 
 @interface TSDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIView *detailEnclosingView;
@@ -21,8 +21,10 @@
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 @property (strong, nonatomic) TSRiverItem *riverItem;
 @property (strong, nonatomic) TSRiverFeed *riverFeed;
+
 - (void)configureView;
 - (IBAction)showActions:(id)sender;
+- (void)showLink:(UIStoryboardSegue *)segue sender:(id)sender;
 @end
 
 @implementation TSDetailViewController
@@ -56,22 +58,32 @@
 
 - (IBAction)showActions:(id)sender
 {
-    if (IsEmpty([self riverItem]))
+    if (IsEmpty([self riverItem])) {
         return;
+    }
     
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[[self riverItem] link]] applicationActivities:@[[ZYInstapaperActivity new], [TUSafariActivity new]]];
-    [activityViewController setExcludedActivityTypes:@[UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll, UIActivityTypePrint, UIActivityTypePostToFlickr, UIActivityTypePostToVimeo]];
-    
+    UIActivityViewController *activityController = [TSActivityUtilities activityControllerForURL:[[self riverItem] link]];
+
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityController];
         [popoverController presentPopoverFromBarButtonItem:[[self navigationItem] rightBarButtonItem] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         
-        [activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+        [activityController setCompletionHandler:^(NSString *activityType, BOOL completed) {
             [popoverController dismissPopoverAnimated:YES];
         }];
+    } else {
+        [self presentViewController:activityController animated:YES completion:nil];
+    }
+}
 
-    } else
-        [self presentViewController:activityViewController animated:YES completion:nil];
+- (void)showLink:(UIStoryboardSegue *)segue sender:(id)sender;
+{
+    [[segue destinationViewController] setLink:[[self riverItem] link]];
+}
+
+- (void)showFeedWebsite:(UIStoryboardSegue *)segue sender:(id)sender;
+{
+    [[segue destinationViewController] setLink:[[self riverFeed] website]];
 }
 
 #pragma mark -
@@ -85,11 +97,13 @@
         [self configureView];
     }
 
-    if ([self masterPopoverController] != nil)
+    if ([self masterPopoverController] != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
+    }
 
-    if (self.navigationController.visibleViewController != self)
+    if (self.navigationController.visibleViewController != self) {
         [self.navigationController popToViewController:self animated:YES];
+    }
 }
 
 #pragma mark -
@@ -99,17 +113,6 @@
 {
     [super viewDidLoad];
     [self configureView];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showLink"]) {
-        [[segue destinationViewController] setLink:[[self riverItem] link]];
-    }
-    
-    if ([[segue identifier] isEqualToString:@"showFeedWebsite"]) {
-        [[segue destinationViewController] setLink:[[self riverFeed] website]];
-    }
 }
 
 #pragma mark -

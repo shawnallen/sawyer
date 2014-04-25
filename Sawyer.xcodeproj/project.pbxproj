@@ -23,27 +23,8 @@
 		2983E88E175FC04C00B0657A /* TSRiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 2983E88D175FC04C00B0657A /* TSRiver.m */; };
 		2986AD7E17602C71000CEC22 /* TSWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2986AD7D17602C71000CEC22 /* TSWebViewController.m */; };
 		2986AD81176030EB000CEC22 /* TSFeedItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */; };
-		521DCA751770B0FC00865F44 /* wave.png in Resources */ = {isa = PBXBuildFile; fileRef = 521DCA731770B0FC00865F44 /* wave.png */; };
-		521DCA761770B0FC00865F44 /* wave@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 521DCA741770B0FC00865F44 /* wave@2x.png */; };
-		5242704A1760F52000DF3CFE /* instapaper-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270221760F52000DF3CFE /* instapaper-ipad.png */; };
-		5242704B1760F52000DF3CFE /* instapaper-ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270231760F52000DF3CFE /* instapaper-ipad@2x.png */; };
-		5242704C1760F52000DF3CFE /* instapaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270241760F52000DF3CFE /* instapaper.png */; };
-		5242704D1760F52000DF3CFE /* instapaper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 524270251760F52000DF3CFE /* instapaper@2x.png */; };
-		5242704E1760F52000DF3CFE /* ZYInstapaperAddRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270281760F52000DF3CFE /* ZYInstapaperAddRequest.m */; };
-		5242704F1760F52000DF3CFE /* ZYInstapaperActivitySecurity.m in Sources */ = {isa = PBXBuildFile; fileRef = 5242702C1760F52000DF3CFE /* ZYInstapaperActivitySecurity.m */; };
-		524270501760F52000DF3CFE /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270311760F52000DF3CFE /* KeychainItemWrapper.m */; };
-		524270511760F52000DF3CFE /* ZYActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270351760F52000DF3CFE /* ZYActivity.m */; };
-		524270521760F52000DF3CFE /* ZYTopAlignedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270381760F52000DF3CFE /* ZYTopAlignedLabel.m */; };
-		524270531760F52000DF3CFE /* ZYActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5242703B1760F52000DF3CFE /* ZYActivityViewController.m */; };
-		524270541760F52000DF3CFE /* ZYAddItemsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5242703D1760F52000DF3CFE /* ZYAddItemsViewController.m */; };
-		524270551760F52000DF3CFE /* ZYAddItemsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5242703E1760F52000DF3CFE /* ZYAddItemsViewController.xib */; };
-		524270561760F52000DF3CFE /* ZYAddItemViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5242703F1760F52000DF3CFE /* ZYAddItemViewController-iPad.xib */; };
-		524270571760F52000DF3CFE /* ZYAddItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270411760F52000DF3CFE /* ZYAddItemViewController.m */; };
-		524270581760F52000DF3CFE /* ZYAddItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 524270421760F52000DF3CFE /* ZYAddItemViewController.xib */; };
-		524270591760F52000DF3CFE /* ZYCredentialsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270441760F52000DF3CFE /* ZYCredentialsViewController.m */; };
-		5242705A1760F52000DF3CFE /* ZYCredentialsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 524270451760F52000DF3CFE /* ZYCredentialsViewController.xib */; };
-		5242705B1760F52000DF3CFE /* ZYInstapaperActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270471760F52000DF3CFE /* ZYInstapaperActivity.m */; };
-		5242705C1760F52000DF3CFE /* ZYInstapaperActivityItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 524270491760F52000DF3CFE /* ZYInstapaperActivityItem.m */; };
+		29CBB373190B02A00031403F /* UIViewController+SASegueAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB372190B02A00031403F /* UIViewController+SASegueAdditions.m */; };
+		29CBB376190B03660031403F /* TSActivityUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB375190B03660031403F /* TSActivityUtilities.m */; };
 		5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5242705D1760F55E00DF3CFE /* Security.framework */; };
 		5242706017610A5D00DF3CFE /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5242705F17610A5D00DF3CFE /* Settings.bundle */; };
 		52AE68DF178F2E7300FB7F17 /* TUSafariActivity.strings in Resources */ = {isa = PBXBuildFile; fileRef = 52AE68C5178F2E7300FB7F17 /* TUSafariActivity.strings */; };
@@ -81,42 +62,11 @@
 		2986AD7D17602C71000CEC22 /* TSWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSWebViewController.m; sourceTree = "<group>"; };
 		2986AD7F176030EB000CEC22 /* TSFeedItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSFeedItemTableViewCell.h; sourceTree = "<group>"; };
 		2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSFeedItemTableViewCell.m; sourceTree = "<group>"; };
-		520EDA111791A0CC00DB4E4A /* TSRiverDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSRiverDelegate.h; sourceTree = "<group>"; };
-		521DCA731770B0FC00865F44 /* wave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wave.png; sourceTree = "<group>"; };
-		521DCA741770B0FC00865F44 /* wave@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wave@2x.png"; sourceTree = "<group>"; };
+		29CBB371190B02A00031403F /* UIViewController+SASegueAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SASegueAdditions.h"; sourceTree = "<group>"; };
+		29CBB372190B02A00031403F /* UIViewController+SASegueAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SASegueAdditions.m"; sourceTree = "<group>"; };
+		29CBB374190B03660031403F /* TSActivityUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSActivityUtilities.h; sourceTree = "<group>"; };
+		29CBB375190B03660031403F /* TSActivityUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSActivityUtilities.m; sourceTree = "<group>"; };
 		521DCA771770B7D500865F44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		521FEBCC177B4D51005B4D12 /* Sawyer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Sawyer.entitlements; sourceTree = "<group>"; };
-		524270221760F52000DF3CFE /* instapaper-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad.png"; sourceTree = "<group>"; };
-		524270231760F52000DF3CFE /* instapaper-ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper-ipad@2x.png"; sourceTree = "<group>"; };
-		524270241760F52000DF3CFE /* instapaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instapaper.png; sourceTree = "<group>"; };
-		524270251760F52000DF3CFE /* instapaper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "instapaper@2x.png"; sourceTree = "<group>"; };
-		524270271760F52000DF3CFE /* ZYInstapaperAddRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYInstapaperAddRequest.h; sourceTree = "<group>"; };
-		524270281760F52000DF3CFE /* ZYInstapaperAddRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYInstapaperAddRequest.m; sourceTree = "<group>"; };
-		524270291760F52000DF3CFE /* ZYInstapaperAddRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYInstapaperAddRequestDelegate.h; sourceTree = "<group>"; };
-		5242702B1760F52000DF3CFE /* ZYInstapaperActivitySecurity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYInstapaperActivitySecurity.h; sourceTree = "<group>"; };
-		5242702C1760F52000DF3CFE /* ZYInstapaperActivitySecurity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYInstapaperActivitySecurity.m; sourceTree = "<group>"; };
-		524270301760F52000DF3CFE /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
-		524270311760F52000DF3CFE /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
-		524270341760F52000DF3CFE /* ZYActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYActivity.h; sourceTree = "<group>"; };
-		524270351760F52000DF3CFE /* ZYActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYActivity.m; sourceTree = "<group>"; };
-		524270371760F52000DF3CFE /* ZYTopAlignedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYTopAlignedLabel.h; sourceTree = "<group>"; };
-		524270381760F52000DF3CFE /* ZYTopAlignedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYTopAlignedLabel.m; sourceTree = "<group>"; };
-		5242703A1760F52000DF3CFE /* ZYActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYActivityViewController.h; sourceTree = "<group>"; };
-		5242703B1760F52000DF3CFE /* ZYActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYActivityViewController.m; sourceTree = "<group>"; };
-		5242703C1760F52000DF3CFE /* ZYAddItemsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYAddItemsViewController.h; sourceTree = "<group>"; };
-		5242703D1760F52000DF3CFE /* ZYAddItemsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYAddItemsViewController.m; sourceTree = "<group>"; };
-		5242703E1760F52000DF3CFE /* ZYAddItemsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZYAddItemsViewController.xib; sourceTree = "<group>"; };
-		5242703F1760F52000DF3CFE /* ZYAddItemViewController-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ZYAddItemViewController-iPad.xib"; sourceTree = "<group>"; };
-		524270401760F52000DF3CFE /* ZYAddItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYAddItemViewController.h; sourceTree = "<group>"; };
-		524270411760F52000DF3CFE /* ZYAddItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYAddItemViewController.m; sourceTree = "<group>"; };
-		524270421760F52000DF3CFE /* ZYAddItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZYAddItemViewController.xib; sourceTree = "<group>"; };
-		524270431760F52000DF3CFE /* ZYCredentialsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYCredentialsViewController.h; sourceTree = "<group>"; };
-		524270441760F52000DF3CFE /* ZYCredentialsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYCredentialsViewController.m; sourceTree = "<group>"; };
-		524270451760F52000DF3CFE /* ZYCredentialsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZYCredentialsViewController.xib; sourceTree = "<group>"; };
-		524270461760F52000DF3CFE /* ZYInstapaperActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYInstapaperActivity.h; sourceTree = "<group>"; };
-		524270471760F52000DF3CFE /* ZYInstapaperActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYInstapaperActivity.m; sourceTree = "<group>"; };
-		524270481760F52000DF3CFE /* ZYInstapaperActivityItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYInstapaperActivityItem.h; sourceTree = "<group>"; };
-		524270491760F52000DF3CFE /* ZYInstapaperActivityItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYInstapaperActivityItem.m; sourceTree = "<group>"; };
 		5242705D1760F55E00DF3CFE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		5242705F17610A5D00DF3CFE /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		52AE68C6178F2E7300FB7F17 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/TUSafariActivity.strings; sourceTree = "<group>"; };
@@ -193,7 +143,6 @@
 		29649CD0175F7B7B005C4466 /* Sawyer */ = {
 			isa = PBXGroup;
 			children = (
-				521FEBCC177B4D51005B4D12 /* Sawyer.entitlements */,
 				2986AD7C17602C71000CEC22 /* TSWebViewController.h */,
 				2986AD7D17602C71000CEC22 /* TSWebViewController.m */,
 				2983E88C175FC04C00B0657A /* TSRiver.h */,
@@ -202,9 +151,12 @@
 				29649CDA175F7B7B005C4466 /* TSAppDelegate.m */,
 				29649CE2175F7B7B005C4466 /* MainStoryboard_iPhone.storyboard */,
 				29649CE5175F7B7B005C4466 /* MainStoryboard_iPad.storyboard */,
-				520EDA111791A0CC00DB4E4A /* TSRiverDelegate.h */,
 				29649CE8175F7B7B005C4466 /* TSMasterViewController.h */,
 				29649CE9175F7B7B005C4466 /* TSMasterViewController.m */,
+				29CBB374190B03660031403F /* TSActivityUtilities.h */,
+				29CBB375190B03660031403F /* TSActivityUtilities.m */,
+				29CBB371190B02A00031403F /* UIViewController+SASegueAdditions.h */,
+				29CBB372190B02A00031403F /* UIViewController+SASegueAdditions.m */,
 				29649CEB175F7B7B005C4466 /* TSDetailViewController.h */,
 				29649CEC175F7B7B005C4466 /* TSDetailViewController.m */,
 				2986AD7F176030EB000CEC22 /* TSFeedItemTableViewCell.h */,
@@ -218,8 +170,6 @@
 		29649CD1175F7B7B005C4466 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				521DCA731770B0FC00865F44 /* wave.png */,
-				521DCA741770B0FC00865F44 /* wave@2x.png */,
 				2986AD7B175FE478000CEC22 /* SOPrefix.h */,
 				29649CD2175F7B7B005C4466 /* Sawyer-Info.plist */,
 				29649CD3175F7B7B005C4466 /* InfoPlist.strings */,
@@ -237,127 +187,8 @@
 			isa = PBXGroup;
 			children = (
 				52AE68C4178F2E7300FB7F17 /* TUSafariActivity */,
-				524270201760F52000DF3CFE /* ZYInstapaperActivity */,
 			);
 			path = ExternalFrameworks;
-			sourceTree = "<group>";
-		};
-		524270201760F52000DF3CFE /* ZYInstapaperActivity */ = {
-			isa = PBXGroup;
-			children = (
-				524270211760F52000DF3CFE /* Images */,
-				524270261760F52000DF3CFE /* Requests */,
-				5242702A1760F52000DF3CFE /* Security */,
-				5242702D1760F52000DF3CFE /* ThirdParties */,
-				524270391760F52000DF3CFE /* UserInterface */,
-				524270461760F52000DF3CFE /* ZYInstapaperActivity.h */,
-				524270471760F52000DF3CFE /* ZYInstapaperActivity.m */,
-				524270481760F52000DF3CFE /* ZYInstapaperActivityItem.h */,
-				524270491760F52000DF3CFE /* ZYInstapaperActivityItem.m */,
-			);
-			path = ZYInstapaperActivity;
-			sourceTree = "<group>";
-		};
-		524270211760F52000DF3CFE /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				524270221760F52000DF3CFE /* instapaper-ipad.png */,
-				524270231760F52000DF3CFE /* instapaper-ipad@2x.png */,
-				524270241760F52000DF3CFE /* instapaper.png */,
-				524270251760F52000DF3CFE /* instapaper@2x.png */,
-			);
-			path = Images;
-			sourceTree = "<group>";
-		};
-		524270261760F52000DF3CFE /* Requests */ = {
-			isa = PBXGroup;
-			children = (
-				524270271760F52000DF3CFE /* ZYInstapaperAddRequest.h */,
-				524270281760F52000DF3CFE /* ZYInstapaperAddRequest.m */,
-				524270291760F52000DF3CFE /* ZYInstapaperAddRequestDelegate.h */,
-			);
-			path = Requests;
-			sourceTree = "<group>";
-		};
-		5242702A1760F52000DF3CFE /* Security */ = {
-			isa = PBXGroup;
-			children = (
-				5242702B1760F52000DF3CFE /* ZYInstapaperActivitySecurity.h */,
-				5242702C1760F52000DF3CFE /* ZYInstapaperActivitySecurity.m */,
-			);
-			path = Security;
-			sourceTree = "<group>";
-		};
-		5242702D1760F52000DF3CFE /* ThirdParties */ = {
-			isa = PBXGroup;
-			children = (
-				5242702E1760F52000DF3CFE /* Apple */,
-				524270321760F52000DF3CFE /* Zerously */,
-			);
-			path = ThirdParties;
-			sourceTree = "<group>";
-		};
-		5242702E1760F52000DF3CFE /* Apple */ = {
-			isa = PBXGroup;
-			children = (
-				5242702F1760F52000DF3CFE /* KeychainItemWrapper */,
-			);
-			path = Apple;
-			sourceTree = "<group>";
-		};
-		5242702F1760F52000DF3CFE /* KeychainItemWrapper */ = {
-			isa = PBXGroup;
-			children = (
-				524270301760F52000DF3CFE /* KeychainItemWrapper.h */,
-				524270311760F52000DF3CFE /* KeychainItemWrapper.m */,
-			);
-			path = KeychainItemWrapper;
-			sourceTree = "<group>";
-		};
-		524270321760F52000DF3CFE /* Zerously */ = {
-			isa = PBXGroup;
-			children = (
-				524270331760F52000DF3CFE /* ZYActivity */,
-				524270361760F52000DF3CFE /* ZYTopAlignedLabel */,
-			);
-			path = Zerously;
-			sourceTree = "<group>";
-		};
-		524270331760F52000DF3CFE /* ZYActivity */ = {
-			isa = PBXGroup;
-			children = (
-				524270341760F52000DF3CFE /* ZYActivity.h */,
-				524270351760F52000DF3CFE /* ZYActivity.m */,
-			);
-			path = ZYActivity;
-			sourceTree = "<group>";
-		};
-		524270361760F52000DF3CFE /* ZYTopAlignedLabel */ = {
-			isa = PBXGroup;
-			children = (
-				524270371760F52000DF3CFE /* ZYTopAlignedLabel.h */,
-				524270381760F52000DF3CFE /* ZYTopAlignedLabel.m */,
-			);
-			path = ZYTopAlignedLabel;
-			sourceTree = "<group>";
-		};
-		524270391760F52000DF3CFE /* UserInterface */ = {
-			isa = PBXGroup;
-			children = (
-				5242703A1760F52000DF3CFE /* ZYActivityViewController.h */,
-				5242703B1760F52000DF3CFE /* ZYActivityViewController.m */,
-				5242703C1760F52000DF3CFE /* ZYAddItemsViewController.h */,
-				5242703D1760F52000DF3CFE /* ZYAddItemsViewController.m */,
-				5242703E1760F52000DF3CFE /* ZYAddItemsViewController.xib */,
-				5242703F1760F52000DF3CFE /* ZYAddItemViewController-iPad.xib */,
-				524270401760F52000DF3CFE /* ZYAddItemViewController.h */,
-				524270411760F52000DF3CFE /* ZYAddItemViewController.m */,
-				524270421760F52000DF3CFE /* ZYAddItemViewController.xib */,
-				524270431760F52000DF3CFE /* ZYCredentialsViewController.h */,
-				524270441760F52000DF3CFE /* ZYCredentialsViewController.m */,
-				524270451760F52000DF3CFE /* ZYCredentialsViewController.xib */,
-			);
-			path = UserInterface;
 			sourceTree = "<group>";
 		};
 		52AE68C4178F2E7300FB7F17 /* TUSafariActivity */ = {
@@ -464,21 +295,11 @@
 				52AE68E2178F2E7300FB7F17 /* Safari@2x~ipad.png in Resources */,
 				29649CE4175F7B7B005C4466 /* MainStoryboard_iPhone.storyboard in Resources */,
 				29649CE7175F7B7B005C4466 /* MainStoryboard_iPad.storyboard in Resources */,
-				5242704A1760F52000DF3CFE /* instapaper-ipad.png in Resources */,
-				5242704B1760F52000DF3CFE /* instapaper-ipad@2x.png in Resources */,
-				5242704C1760F52000DF3CFE /* instapaper.png in Resources */,
-				5242704D1760F52000DF3CFE /* instapaper@2x.png in Resources */,
-				524270551760F52000DF3CFE /* ZYAddItemsViewController.xib in Resources */,
-				524270561760F52000DF3CFE /* ZYAddItemViewController-iPad.xib in Resources */,
 				52AE68DF178F2E7300FB7F17 /* TUSafariActivity.strings in Resources */,
-				524270581760F52000DF3CFE /* ZYAddItemViewController.xib in Resources */,
-				5242705A1760F52000DF3CFE /* ZYCredentialsViewController.xib in Resources */,
 				52AE68E0178F2E7300FB7F17 /* Safari.png in Resources */,
 				52AE68E1178F2E7300FB7F17 /* Safari@2x.png in Resources */,
 				52AE68E3178F2E7300FB7F17 /* Safari~ipad.png in Resources */,
 				5242706017610A5D00DF3CFE /* Settings.bundle in Resources */,
-				521DCA751770B0FC00865F44 /* wave.png in Resources */,
-				521DCA761770B0FC00865F44 /* wave@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,23 +312,14 @@
 			files = (
 				29649CD7175F7B7B005C4466 /* main.m in Sources */,
 				29649CDB175F7B7B005C4466 /* TSAppDelegate.m in Sources */,
+				29CBB373190B02A00031403F /* UIViewController+SASegueAdditions.m in Sources */,
 				29649CEA175F7B7B005C4466 /* TSMasterViewController.m in Sources */,
 				52AE68E4178F2E7300FB7F17 /* TUSafariActivity.m in Sources */,
 				29649CED175F7B7B005C4466 /* TSDetailViewController.m in Sources */,
+				29CBB376190B03660031403F /* TSActivityUtilities.m in Sources */,
 				2983E88E175FC04C00B0657A /* TSRiver.m in Sources */,
 				2986AD7E17602C71000CEC22 /* TSWebViewController.m in Sources */,
 				2986AD81176030EB000CEC22 /* TSFeedItemTableViewCell.m in Sources */,
-				5242704E1760F52000DF3CFE /* ZYInstapaperAddRequest.m in Sources */,
-				5242704F1760F52000DF3CFE /* ZYInstapaperActivitySecurity.m in Sources */,
-				524270501760F52000DF3CFE /* KeychainItemWrapper.m in Sources */,
-				524270511760F52000DF3CFE /* ZYActivity.m in Sources */,
-				524270521760F52000DF3CFE /* ZYTopAlignedLabel.m in Sources */,
-				524270531760F52000DF3CFE /* ZYActivityViewController.m in Sources */,
-				524270541760F52000DF3CFE /* ZYAddItemsViewController.m in Sources */,
-				524270571760F52000DF3CFE /* ZYAddItemViewController.m in Sources */,
-				524270591760F52000DF3CFE /* ZYCredentialsViewController.m in Sources */,
-				5242705B1760F52000DF3CFE /* ZYInstapaperActivity.m in Sources */,
-				5242705C1760F52000DF3CFE /* ZYInstapaperActivityItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,7 +391,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -611,7 +423,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -628,13 +440,12 @@
 		29649CF1175F7B7B005C4466 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Sawyer/Sawyer.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -642,13 +453,12 @@
 		29649CF2175F7B7B005C4466 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = Sawyer/Sawyer.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TSRiver.h"
+
+@class TSRiverFeed;
+@class TSRiverItem;
 
 @interface TSDetailViewController : UIViewController <UISplitViewControllerDelegate>
-
-
 - (void)setDetailItem:(TSRiverItem *)detailItem feed:(TSRiverFeed *)feed;
 @end

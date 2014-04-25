@@ -10,6 +10,6 @@
 
 @interface TSWebViewController : UIViewController
 
-- (void)setLink:(NSURL *)link;
+@property (nonatomic) NSURL *link;
 
 @end

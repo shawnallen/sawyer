@@ -10,11 +10,8 @@
 #import "TSDetailViewController.h"
 #import "TSRiver.h"
 #import "TSFeedItemTableViewCell.h"
-#import "TSAppDelegate.h"
 
-@interface TSMasterViewController () {
-    NSString *_highWatermarkIdentifier;
-}
+@interface TSMasterViewController ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *lastUpdatedButton;
 @property (nonatomic) NSString *highWatermarkIdentifier;
@@ -26,8 +23,12 @@
 
 - (NSIndexPath *)recalculateWatermark;
 - (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
+- (void)deselectTwainRow;
+- (void)updateDateDisplay;
 - (IBAction)refreshRiver;
 - (IBAction)showTwain:(id)sender;
+- (IBAction)toggleUpdatedDate:(id)sender;
+- (void)showDetail:(UIStoryboardSegue *)segue sender:(id)sender;
 
 @end
 
@@ -36,27 +37,7 @@
 #pragma mark -
 #pragma mark Class extension
 
-@dynamic highWatermarkIdentifier;
-
 NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
-NSString * const kWatermarkReuseIdentifier = @"Watermark";
-
-- (NSString *)highWatermarkIdentifier
-{
-    if (_highWatermarkIdentifier == nil)
-        _highWatermarkIdentifier = [[NSUserDefaults standardUserDefaults] stringForKey:kHighWatermarkIdentifierKey];
-
-    return _highWatermarkIdentifier;
-}
-
-- (void)setHighWatermarkIdentifier:(NSString *)highWatermarkIdentifier;
-{
-    [[NSUserDefaults standardUserDefaults] setValue:highWatermarkIdentifier forKey:kHighWatermarkIdentifierKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [self recalculateWatermark];
-    _highWatermarkIdentifier = highWatermarkIdentifier;
-}
 
 - (NSIndexPath *)recalculateWatermark;
 {
@@ -150,13 +131,13 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     [self.tableView deselectRowAtIndexPath:self.watermarkIndexPath animated:YES];
 }
 
-- (IBAction)toggleUpdatedDate:(id)sender
+- (IBAction)toggleUpdatedDate:(id)sender;
 {
     self.showingLastUpdated = !self.showingLastUpdated;
     [self updateDateDisplay];
 }
 
-- (void)updateDateDisplay
+- (void)updateDateDisplay;
 {
     NSString *dateTitleForDisplay;
     
@@ -172,12 +153,10 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
         
 }
 
-#pragma mark -
-#pragma mark TSRiverDelegate
-
-- (void)performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)showDetail:(UIStoryboardSegue *)segue sender:(id)sender;
 {
-    completionHandler(UIBackgroundFetchResultNoData);
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    [(TSDetailViewController *)[segue destinationViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
 }
 
 #pragma mark -
@@ -189,7 +168,26 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
         self.clearsSelectionOnViewWillAppear = NO;
         self.preferredContentSize = CGSizeMake(320.0, 600.0);
     }
+    
     [super awakeFromNib];
+    [self addObserver:self forKeyPath:@"highWatermarkIdentifier" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"highWatermarkIdentifier"]) {
+        [[NSUserDefaults standardUserDefaults] setValue:[self highWatermarkIdentifier] forKey:kHighWatermarkIdentifierKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [self recalculateWatermark];
+        return;
+    }
+    
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"highWatermarkIdentifier"];
 }
 
 #pragma mark -
@@ -198,12 +196,13 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    ((TSAppDelegate *)[UIApplication sharedApplication].delegate).riverDelegate = self;
     [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
     self.showingLastUpdated = YES;
+    [self setHighWatermarkIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:kHighWatermarkIdentifierKey]];
 
     [[self lastUpdatedButton] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:12.0], NSForegroundColorAttributeName : [UIColor blackColor]} forState:UIControlStateNormal];
+    
 
     if ([self prepareRiver] == YES)
         [self refreshRiver];
@@ -221,14 +220,6 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
     [super didReceiveMemoryWarning];
     [[NSNotificationCenter defaultCenter] removeObserver:self.settingsObserver];
     [self setRiver:nil];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        [(TSDetailViewController *)[segue destinationViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
-    }
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
@@ -260,9 +251,7 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 {
     TSFeedItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     TSRiverItem *item = [[self river] itemForIndexPath:indexPath];
-    cell.title.text = [item title];
-    cell.body.text = [item body];
-    cell.date.text = [NSDateFormatter localizedStringFromDate:[item publicationDate] dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+    cell.riverItem = item;
     return cell;
 }
 
@@ -288,8 +277,10 @@ NSString * const kWatermarkReuseIdentifier = @"Watermark";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [[self detailViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
+        return;
+    }
 }
 
 @end

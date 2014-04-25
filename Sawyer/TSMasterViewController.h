@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TSRiverDelegate.h"
 
 @class TSDetailViewController;
 
-@interface TSMasterViewController : UITableViewController<TSRiverDelegate>
+@interface TSMasterViewController : UITableViewController
 
 @property (strong, nonatomic) TSDetailViewController *detailViewController;
 
