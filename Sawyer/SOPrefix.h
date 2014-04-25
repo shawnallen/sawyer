@@ -1,9 +1,7 @@
 /*
  *  SOPrefix.h
  *
- *  Created by Shawn Allen on 7/24/11.
- *  Copyright 2012 Sotto. All rights reserved.
- *
+ *  Created by Shawn Allen on 1/24/11.
  */
 
 // IsEmpty from Wil Shipley's DMCommonMacros.h, under public domain.
@@ -15,6 +13,14 @@ static inline BOOL IsEmpty(id thing)
         && [(NSData *)thing length] == 0)
     || ([thing respondsToSelector:@selector(count)]
         && [(NSArray *)thing count] == 0);
+}
+
+static inline void performOnMainThread(void (^block)())
+{
+    if ([NSThread isMainThread] == YES)
+        block();
+    else
+        dispatch_sync(dispatch_get_main_queue(), block);
 }
 
 // Adapted from Marcus Zarra's prefix header file conventions.
