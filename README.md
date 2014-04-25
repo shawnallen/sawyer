@@ -8,10 +8,10 @@ The default feed points to Dave Winer's personal River, which you may change by 
 Recent Changes
 ========
 
-4/25/14 - Updated the storyboard, the layout, and resumed working on background fetch.  Removed Instapaper activity.  Updated to the latest TUSafariActivity.
-7/15/13 - Updated for the minimum of iOS 7 support, and began work on iOS 7 background fetch and iCloud.  TSRiver does way too much -- so wrong.
-6/17/13 - Changed to use UIWebView for processing the JSONP.
-6/7/13 - Added a "Twain" button to scroll to the high-water mark to which the user last manually refreshed.  There is also a visual cue in the section which contains this high-water mark.  My intention is to push that place into iCloud, for coherency across devices.
+* 4/25/14 - Updated the storyboard, the layout, and resumed working on background fetch.  Removed Instapaper activity.  Updated to the latest TUSafariActivity.
+* 7/15/13 - Updated for the minimum of iOS 7 support, and began work on iOS 7 background fetch and iCloud.  TSRiver does way too much -- so wrong.
+* 6/17/13 - Changed to use UIWebView for processing the JSONP.
+* 6/7/13 - Added a "Twain" button to scroll to the high-water mark to which the user last manually refreshed.  There is also a visual cue in the section which contains this high-water mark.  My intention is to push that place into iCloud, for coherency across devices.
 
 Screenshots
 ========
@@ -19,6 +19,8 @@ Screenshots
 ![](https://raw.github.com/shawnallen/sawyer/master/images/sawyer.png)
 ![](https://raw.github.com/shawnallen/sawyer/master/images/item.png)
 ![](https://raw.github.com/shawnallen/sawyer/master/images/safari.png)
+![](https://raw.github.com/shawnallen/sawyer/master/images/sawyer~ipad.png)
+![](https://raw.github.com/shawnallen/sawyer/master/images/safari~ipad.png)
 
 Many thanks to Dave Winer for River2 and River3, the prescience to produce the feed in JSON, along with the OPML Editor that the platform sits a top of.
 
