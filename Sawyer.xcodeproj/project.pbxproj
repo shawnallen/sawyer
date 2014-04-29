@@ -26,6 +26,7 @@
 		29CBB373190B02A00031403F /* UIViewController+SASegueAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB372190B02A00031403F /* UIViewController+SASegueAdditions.m */; };
 		29CBB376190B03660031403F /* TSActivityUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB375190B03660031403F /* TSActivityUtilities.m */; };
 		29CBB378190B20010031403F /* TUSafariActivity.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 29CBB377190B20010031403F /* TUSafariActivity.bundle */; };
+		29FC9D7C190FEF60000FE91A /* NSDate+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */; };
 		5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5242705D1760F55E00DF3CFE /* Security.framework */; };
 		5242706017610A5D00DF3CFE /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5242705F17610A5D00DF3CFE /* Settings.bundle */; };
 		52AE68E4178F2E7300FB7F17 /* TUSafariActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 52AE68DC178F2E7300FB7F17 /* TUSafariActivity.m */; };
@@ -63,6 +64,8 @@
 		29CBB374190B03660031403F /* TSActivityUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSActivityUtilities.h; sourceTree = "<group>"; };
 		29CBB375190B03660031403F /* TSActivityUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSActivityUtilities.m; sourceTree = "<group>"; };
 		29CBB377190B20010031403F /* TUSafariActivity.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUSafariActivity.bundle; sourceTree = "<group>"; };
+		29FC9D7A190FEF60000FE91A /* NSDate+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+HTTP.h"; sourceTree = "<group>"; };
+		29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HTTP.m"; sourceTree = "<group>"; };
 		521DCA771770B7D500865F44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5242705D1760F55E00DF3CFE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		5242705F17610A5D00DF3CFE /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -117,6 +120,8 @@
 		29649CD0175F7B7B005C4466 /* Sawyer */ = {
 			isa = PBXGroup;
 			children = (
+				29FC9D7A190FEF60000FE91A /* NSDate+HTTP.h */,
+				29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */,
 				2986AD7C17602C71000CEC22 /* TSWebViewController.h */,
 				2986AD7D17602C71000CEC22 /* TSWebViewController.m */,
 				2983E88C175FC04C00B0657A /* TSRiver.h */,
@@ -209,7 +214,7 @@
 						DevelopmentTeam = SVLUY7HCQ7;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -283,6 +288,7 @@
 				52AE68E4178F2E7300FB7F17 /* TUSafariActivity.m in Sources */,
 				29649CED175F7B7B005C4466 /* TSDetailViewController.m in Sources */,
 				29CBB376190B03660031403F /* TSActivityUtilities.m in Sources */,
+				29FC9D7C190FEF60000FE91A /* NSDate+HTTP.m in Sources */,
 				2983E88E175FC04C00B0657A /* TSRiver.m in Sources */,
 				2986AD7E17602C71000CEC22 /* TSWebViewController.m in Sources */,
 				2986AD81176030EB000CEC22 /* TSFeedItemTableViewCell.m in Sources */,
@@ -380,12 +386,15 @@
 		29649CF1175F7B7B005C4466 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 11;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -393,12 +402,15 @@
 		29649CF2175F7B7B005C4466 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 11;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

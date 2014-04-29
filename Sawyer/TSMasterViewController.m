@@ -16,19 +16,25 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *lastUpdatedButton;
 @property (nonatomic) NSString *highWatermarkIdentifier;
 @property (nonatomic) TSRiver *river;
-@property (nonatomic) id settingsObserver;
+@property (nonatomic) id riverDidRefreshObserver;
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
 @property (nonatomic) BOOL showingLastUpdated;
-@property (nonatomic) BOOL didRiverUpdateSinceLastUse;
+@property (nonatomic) BOOL didInitialUpdateComplete;
 
 - (NSIndexPath *)recalculateWatermark;
-- (BOOL)prepareRiver;  // Returns YES if the URL of the River has changed
 - (void)deselectTwainRow;
 - (void)updateDateDisplay;
-- (IBAction)refreshRiver;
 - (IBAction)showTwain:(id)sender;
 - (IBAction)toggleUpdatedDate:(id)sender;
 - (void)showDetail:(UIStoryboardSegue *)segue sender:(id)sender;
+- (IBAction)pulledToRefresh:(id)sender;
+- (void)prepareDisplayForRiverUpdate;
+- (void)updateLatestRiverAndDisplay;
+
+- (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
+- (TSRiverFeed *)feedForSection:(NSInteger)section;
+- (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
 
 @end
 
@@ -55,59 +61,42 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
         return watermarkIndexPath;
     }
     
-    watermarkIndexPath = [[self river] indexPathForItem:watermarkItem];
+    watermarkIndexPath = [self indexPathForItem:watermarkItem];
     [self setWatermarkIndexPath:watermarkIndexPath];
     return watermarkIndexPath;
 }
 
-- (BOOL)prepareRiver;
+- (IBAction)pulledToRefresh:(id)sender;
 {
-    NSString *riverURLString = [[NSUserDefaults standardUserDefaults] valueForKey:@"river_url"];
-    
-    if (IsEmpty(riverURLString)) {
-        [[NSUserDefaults standardUserDefaults] setValue:TSRiverDefaultURLString forKey:@"river_url"];
-        riverURLString = TSRiverDefaultURLString;
-    }
-    
-    NSURL *riverURL = [NSURL URLWithString:riverURLString];
-    
-    if (riverURL == nil) {
-        ALog(@"User-specified river is an invalid URL");
-        riverURL = [NSURL URLWithString:TSRiverDefaultURLString];
-    }
-    
-    if ([self river] != nil && [[[self river] url] isEqual:riverURL])
-        return NO;
-    
-    [self setRiver:[[TSRiver alloc] initWithURL:riverURL]];
-    return YES;
+    [self prepareDisplayForRiverUpdate];
+    [[TSRiverManager sharedManager] refreshWithCompletionHandler:nil ignoringCache:YES];
 }
 
-- (void)refreshRiver;
+- (void)prepareDisplayForRiverUpdate;
 {
-    if ([self river] == nil || [[self river] isRefreshing])
-        return;
-    
-    [[self refreshControl] beginRefreshing];
+    [self.refreshControl beginRefreshing];
     self.lastUpdatedButton.title = NSLocalizedString(@"Refreshing...", nil);
+
+    NSString *highWatermarkIdentifier = [[self itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
+
+    if (IsEmpty(highWatermarkIdentifier) == NO) {
+        self.highWatermarkIdentifier = highWatermarkIdentifier;
+    }
+}
+
+- (void)updateLatestRiverAndDisplay;
+{
+    DLog(@"");
+    [self.refreshControl endRefreshing];
+    self.river = [[TSRiverManager sharedManager] river];
+    [self updateDateDisplay];
     
-    NSString *highWatermarkIdentifier = [[[self river] itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
+    if ([TSRiverManager sharedManager].lastError != nil) {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[[TSRiverManager sharedManager].lastError description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+    };
     
-    if (IsEmpty(highWatermarkIdentifier) == NO)
-        [self setHighWatermarkIdentifier:highWatermarkIdentifier];
-    
-    [[self river] refreshWithCompletionHandler:^(NSError *error) {
-        [[self refreshControl] endRefreshing];
-        [self updateDateDisplay];
-        
-        if (error != nil) {
-            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[error description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
-            DLog(@"%@", error);
-        };
-        
-        [self recalculateWatermark];
-        [[self tableView] reloadData];
-    }];
+    [self recalculateWatermark];
+    [self.tableView reloadData];
 }
 
 - (IBAction)showTwain:(id)sender
@@ -156,7 +145,51 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (void)showDetail:(UIStoryboardSegue *)segue sender:(id)sender;
 {
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    [(TSDetailViewController *)[segue destinationViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
+    [(TSDetailViewController *)segue.destinationViewController setDetailItem:[self itemForIndexPath:indexPath] feed:[self feedForIndexPath:indexPath]];
+}
+
+
+- (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
+{
+    if (self.river.feeds.count <= indexPath.section)
+        return nil;
+    
+    return self.river.feeds[indexPath.section];
+}
+
+- (TSRiverFeed *)feedForSection:(NSInteger)section;
+{
+    return self.river.feeds[section];
+}
+
+- (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+{
+    NSArray *riverItems = [self feedForIndexPath:indexPath].items;
+    
+    if (riverItems.count <= indexPath.row) {
+        return nil;
+    }
+    
+    return riverItems[indexPath.row];
+}
+
+- (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
+{
+    if (item == nil) {
+        return nil;
+    }
+    
+    for (int feedIndex = 0; feedIndex < self.river.feeds.count; feedIndex++) {
+        NSInteger itemIndex = [[[self.river feeds][feedIndex] items] indexOfObject:item];
+        
+        if (itemIndex == NSNotFound) {
+            continue;
+        }
+        
+        return [NSIndexPath indexPathForRow:itemIndex inSection:feedIndex];
+    }
+    
+    return nil;
 }
 
 #pragma mark -
@@ -196,42 +229,54 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[self refreshControl] addTarget:self action:@selector(refreshRiver) forControlEvents:UIControlEventValueChanged];
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
     self.showingLastUpdated = YES;
     [self setHighWatermarkIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:kHighWatermarkIdentifierKey]];
 
     [[self lastUpdatedButton] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:12.0], NSForegroundColorAttributeName : [UIColor blackColor]} forState:UIControlStateNormal];
-    
+    [self.tableView setSectionIndexMinimumDisplayRowCount:1];
+    [self prepareDisplayForRiverUpdate];
+    self.didInitialUpdateComplete = NO;
+    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
+        self.didInitialUpdateComplete = YES;
 
-    if ([self prepareRiver] == YES)
-        [self refreshRiver];
+        performOnMainThread(^{
+            [self updateLatestRiverAndDisplay];
+        });
+    } ignoringCache:NO];
 
-    [self setSettingsObserver:[[NSNotificationCenter defaultCenter] addObserverForName:NSUserDefaultsDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        if ([self prepareRiver] == YES)
-            [self refreshRiver];
-    }]];
+    self.riverDidRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerDidRefreshRiverNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        DLog(@"Did refresh River notification received.  Updating display.");
+        
+        if (self.didInitialUpdateComplete == NO) {
+            return;
+        }
+        
+        performOnMainThread(^{
+            [self updateLatestRiverAndDisplay];
+        });
+    }];
     
-    [[self tableView] setSectionIndexMinimumDisplayRowCount:1];
 }
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
-    [[NSNotificationCenter defaultCenter] removeObserver:self.settingsObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.riverDidRefreshObserver];
     [self setRiver:nil];
+    [super didReceiveMemoryWarning];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 {
     [super setEditing:editing animated:animated];
     
-    if (editing)
+    if (editing) {
         [[[self navigationItem] rightBarButtonItem] setTitle:NSLocalizedString(@"Cancel", nil)];
-    else
+    } else {
         [[[self navigationItem] rightBarButtonItem] setTitle:NSLocalizedString(@"Twain", nil)];
+    }
     
-    [[self tableView] setEditing:editing animated:animated];
+    [self.tableView setEditing:editing animated:animated];
 }
 
 #pragma mark -
@@ -239,30 +284,30 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [[[self river] feeds] count];
+    return self.river.feeds.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[[[self river] feedForSection:section] items] count];
+    return [[[self feedForSection:section] items] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TSFeedItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    TSRiverItem *item = [[self river] itemForIndexPath:indexPath];
+    TSRiverItem *item = [self itemForIndexPath:indexPath];
     cell.riverItem = item;
     return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 {
-    return [[[self river] feedForSection:section] title];
+    return [[self feedForSection:section] title];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    [self setHighWatermarkIdentifier:[self.river itemForIndexPath:indexPath].identifier];
+    [self setHighWatermarkIdentifier:[self itemForIndexPath:indexPath].identifier];
     [self recalculateWatermark];
     [self performSelector:@selector(setEditing:) withObject:NO afterDelay:0.0];
 }
@@ -278,7 +323,7 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [[self detailViewController] setDetailItem:[[self river] itemForIndexPath:indexPath] feed:[[self river] feedForIndexPath:indexPath]];
+        [[self detailViewController] setDetailItem:[self itemForIndexPath:indexPath] feed:[self feedForIndexPath:indexPath]];
         return;
     }
 }

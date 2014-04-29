@@ -39,23 +39,33 @@
 
 @end
 
-extern NSString * const TSRiverDefaultURLString;
-
 @interface TSRiver : NSObject
 
 @property (nonatomic, readonly) NSArray *feeds;
 @property (nonatomic, readonly) NSDate *fetchedDate;
 @property (nonatomic, readonly) NSDate *whenRiverUpdatedDate;
 @property (nonatomic, readonly) NSURL *url;
-@property (nonatomic, readonly) NSURL *redirectedURL;
-@property (nonatomic, readonly, getter=isRefreshing) BOOL refreshing;
+@property (nonatomic, readonly) NSURL *originalURL;  // If HTTP Server redirection occurs, the URL for the River may differ.
 
-- (id)initWithURL:(NSURL *)url;
-- (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
-- (TSRiverFeed *)feedForSection:(NSInteger)section;
 - (TSRiverItem *)itemForIdentifier:(NSString *)identifier;
-- (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
-- (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
-- (void)refreshWithCompletionHandler:(void (^)(NSError *error))handler;
+
+@end
+
+extern NSString * const TSRiverManagerWillRefreshRiverNotification;
+extern NSString * const TSRiverManagerDidRefreshRiverNotification;
+extern NSString * const TSRiverDefaultURLString;
+extern NSString * const TSRiverManagerURLSessionConfigurationIdentifier;
+typedef void(^TSRiverManagerBackgroundSessionCompletionHandler)();
+
+@interface TSRiverManager : NSObject
+
+@property (nonatomic, readonly) TSRiver *river;
+@property (nonatomic, readonly) BOOL isLoading;
+@property (nonatomic, readonly) NSError *lastError;
+@property (copy) TSRiverManagerBackgroundSessionCompletionHandler sessionCompletionHandler;
+
++ (TSRiverManager *)sharedManager;
+
+- (void)refreshWithCompletionHandler:(void (^)(NSError *error))completionHandler ignoringCache:(BOOL)ignoringCache;
 
 @end

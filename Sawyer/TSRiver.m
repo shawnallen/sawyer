@@ -7,12 +7,13 @@
 //
 
 #import "TSRiver.h"
+#import "NSDate+HTTP.h"
 
-@implementation TSRiverFeed
+@implementation TSRiverEnclosure
 
 @end
 
-@implementation TSRiverEnclosure
+@implementation TSRiverFeed
 
 @end
 
@@ -42,18 +43,12 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 @property (nonatomic, readwrite) NSDate *fetchedDate;
 @property (nonatomic, readwrite) NSDate *whenRiverUpdatedDate;
 @property (nonatomic, readwrite) NSURL *url;
-@property (nonatomic, readwrite) NSURL *redirectedURL;
-@property (nonatomic, readwrite) BOOL refreshing;
+@property (nonatomic, readwrite) NSURL *originalURL;
 @property (nonatomic) NSString *version;
-
-
 @property (nonatomic) NSString *paddingFunctionName;
-@property (nonatomic) NSOperationQueue *fetchQueue;
-@property (nonatomic) NSError *lastError;
 
+- (id)initWithURL:(NSURL *)url;
 - (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
-
-+ (NSDateFormatter *)initDateFormatter;
 
 @end
 
@@ -62,30 +57,25 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 #pragma mark -
 #pragma mark Class extension
 
-+ (NSDateFormatter *)initDateFormatter
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-    [dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss zzz"];
-    return dateFormatter;
-}
-
 - (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
 {
-    UIWebView *deserializationWebView = [[UIWebView alloc] init];
+    __block UIWebView *deserializationWebView;
+    
+    performOnMainThread(^{
+        deserializationWebView = [[UIWebView alloc] init];
+    });
+    
     NSString *riverJavaScript = [NSString stringWithFormat:@"function %@(river){return JSON.stringify(river);};%@;", self.paddingFunctionName, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-    NSString *riverResult = [deserializationWebView stringByEvaluatingJavaScriptFromString:riverJavaScript];
+    
+    __block NSString *riverResult;
+    
+    performOnMainThread(^{
+        riverResult = [deserializationWebView stringByEvaluatingJavaScriptFromString:riverJavaScript];
+    });
+    
     NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:[riverResult dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] options:0 error:error];
     
-    if (IsEmpty(newRiver)) {
-        DLog(@"Failure deserializing river:[%@]", *error);
-        return NO;
-    }
-    
-    NSDateFormatter *dateFormatter = [TSRiver initDateFormatter];
-    
-    [self setWhenRiverUpdatedDate:[dateFormatter dateFromString:[newRiver valueForKeyPath:@"metadata.whenGMT"]]];
+    [self setWhenRiverUpdatedDate:[NSDate dateFromHttpDate:[newRiver valueForKeyPath:@"metadata.whenGMT"]]];
     [self setVersion:[newRiver valueForKeyPath:@"metadata.version"]];
     
     NSArray *updatedFeeds = [newRiver valueForKeyPath:@"updatedFeeds.updatedFeed"];
@@ -109,7 +99,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
         NSString *whenLastUpdateString = feed[@"whenLastUpdate"];
         
         if (IsEmpty(whenLastUpdateString) == NO)
-            [newFeed setUpdatedDate:[dateFormatter dateFromString:whenLastUpdateString]];
+            [newFeed setUpdatedDate:[NSDate dateFromHttpDate:whenLastUpdateString]];
         
         NSMutableArray *newItems = [NSMutableArray arrayWithCapacity:[feed[@"item"] count]];
         
@@ -126,7 +116,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
             NSString *pubDateString = item[@"pubDate"];
             
             if (IsEmpty(pubDateString) == NO)
-                [newItem setPublicationDate:[dateFormatter dateFromString:pubDateString]];
+                [newItem setPublicationDate:[NSDate dateFromHttpDate:pubDateString]];
 
             [newItem setTitle:item[@"title"]];
             
@@ -177,31 +167,10 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
         [self setFetchedDate:[NSDate distantPast]];
         [self setWhenRiverUpdatedDate:[NSDate distantPast]];
         [self setFeeds:[NSArray array]];
-        [self setLastError:nil];
         [self setPaddingFunctionName:TSRiverDefaultPaddingFunctionName];
-        [self setFetchQueue:[[NSOperationQueue alloc] init]];
-        [[self fetchQueue] setName:@"TSRiverFetchQueue"];
     }
     
     return self;
-}
-
-- (BOOL)isRefreshing;
-{
-    return _refreshing;
-}
-
-- (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
-{
-    if ([[self feeds] count] <= [indexPath section])
-        return nil;
-    
-    return [self feeds][[indexPath section]];
-}
-
-- (TSRiverFeed *)feedForSection:(NSInteger)section;
-{
-    return [self feeds][section];
 }
 
 - (TSRiverItem *)itemForIdentifier:(NSString *)identifier;
@@ -219,76 +188,6 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     return nil;
 }
 
-- (TSRiverItem *)itemForIndexPath:(NSIndexPath *)indexPath;
-{
-    NSArray *riverItems = [[self feedForIndexPath:indexPath] items];
-    
-    if ([riverItems count] <= [indexPath row])
-        return nil;
-    
-    return riverItems[[indexPath row]];
-}
-
-- (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
-{
-    if (item == nil)
-        return nil;
-
-    for (int feedIndex = 0; feedIndex < [[self feeds] count]; feedIndex++) {
-        NSInteger itemIndex = [[[self feeds][feedIndex] items] indexOfObject:item];
-        
-        if (itemIndex == NSNotFound)
-            continue;
-        
-        return [NSIndexPath indexPathForRow:itemIndex inSection:feedIndex];
-    }
-    
-    return nil;
-}
-
-- (void)refreshWithCompletionHandler:(void (^)(NSError *))handler;
-{
-    NSURLRequest *request = [NSURLRequest requestWithURL:[self url]];
-    
-    if ([self isRefreshing]) {
-        ALog(@"Superfluous call to refresh river [%@].", self);
-
-        [[self fetchQueue] addOperationWithBlock:^{
-            handler([self lastError]);
-        }];
-        
-        return;
-    }
-    
-    [self setLastError:nil];
-    [self setRefreshing:YES];
-    
-    [NSURLConnection sendAsynchronousRequest:request queue:[self fetchQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            SOAssert([NSRunLoop mainRunLoop] == [NSRunLoop currentRunLoop], @"Potential user interface interaction not occurring on the main run loop");
-            
-            [self setLastError:error];
-            [self setRefreshing:NO];
-            
-            if (error != nil) {
-                handler([self lastError]);
-                return;
-            }
-            
-            [self setFetchedDate:[NSDate date]];
-            // TODO: Set redirected URL based on the properties of the response
-            
-            NSError *deserializationError;
-            
-            if ([self populateRiverFromData:data error:&deserializationError] == NO)
-                [self setLastError:deserializationError];
-            
-            handler([self lastError]);
-        }];
-    }];
-}
-
-
 #pragma mark -
 #pragma mark NSObject
 
@@ -300,6 +199,336 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"TSRiver [(%@) updated:%@, riverUpdated:%@, version:%@]", [self url], [self fetchedDate] == [NSDate distantPast] ? @"(none)" : [self fetchedDate], [self whenRiverUpdatedDate] == nil ? @"(unknown)" : [self whenRiverUpdatedDate], [self version] == nil ? @"(unknown)" : [self version]];
+}
+
+@end
+
+NSString * const TSRiverManagerWillRefreshRiverNotification = @"TSRiverManagerWillRefreshRiverNotification";
+NSString * const TSRiverManagerDidRefreshRiverNotification = @"TSRiverManagerDidRefreshRiverNotification";
+NSString * const TSRiverManagerURLSessionConfigurationIdentifier = @"TSRiverManagerURLSessionConfigurationIdentifier";
+NSString * const TSRiverManagerRiverURLKey = @"river_url";
+NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interval
+
+@interface TSRiverManager () <NSURLSessionDelegate, NSURLSessionDownloadDelegate>
+@property (nonatomic, readwrite) TSRiver *river;
+@property (nonatomic, readwrite) BOOL isLoading;
+@property (nonatomic, readwrite) NSError *lastError;
+@property (nonatomic) NSURLSession *session;
+@property (nonatomic) NSOperationQueue *sessionQueue;
+@property (nonatomic) NSURLSessionDownloadTask *currentTask;
+@property (nonatomic, copy) void (^currentTaskCompletionHandler)(NSError *error);
+
+- (TSRiver *)initialRiver;
+- (BOOL)shouldRiverBeUpdated;
+- (void)updateRiverFromRequest:(NSURLRequest *)request response:(NSURLResponse *)response data:(NSData *)data;
+- (void)userDefaultsDidChange:(NSNotification *)notification;
+@end
+
+@implementation TSRiverManager
+
+#pragma mark -
+#pragma mark Class extension
+
+- (TSRiver *)initialRiver;
+{
+    NSString *riverURLString = [[NSUserDefaults standardUserDefaults] stringForKey:TSRiverManagerRiverURLKey];
+    
+    if (IsEmpty(riverURLString)) {
+        return [TSRiver new];
+    }
+    
+    NSURL *riverURL = [NSURL URLWithString:riverURLString];
+    
+    if (riverURL == nil) {
+        ALog(@"Invalid River URL was specified [%@].", riverURLString);
+        return [TSRiver new];
+    }
+
+    TSRiver *initialRiver = [[TSRiver alloc] initWithURL:riverURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:initialRiver.url];
+    NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+    
+    if (cachedResponse != nil) {
+        NSError *error;
+        if ([initialRiver populateRiverFromData:cachedResponse.data error:&error] == NO) {
+            ALog(@"Error occurred when populating initial River [%@]", [error localizedDescription]);
+            return [[TSRiver alloc] initWithURL:riverURL];
+        }
+    }
+    
+    return initialRiver;
+}
+
+- (BOOL)shouldRiverBeUpdated;
+{
+    SOAssert(self.river != nil, @"River is unexpectedly nil.");
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.river.url];
+    
+    NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+    
+    if (cachedResponse == nil) {
+        return YES;
+    }
+    
+    NSDate *updatedDate = cachedResponse.userInfo[@"updatedDate"];
+    
+    if (updatedDate != nil) {
+        NSDate *anticipatedRiverUpdateDate = [updatedDate dateByAddingTimeInterval:TSRiverUpdateInterval];
+        
+        if ([anticipatedRiverUpdateDate timeIntervalSinceNow] <= 0) {
+            return YES;
+        }
+        
+        return NO;
+    }
+    
+    NSHTTPURLResponse *response = (NSHTTPURLResponse *)cachedResponse.response;
+    NSDate *expirationDate = [NSDate expirationDateFromHTTPURLResponse:response];
+    
+    if (expirationDate == nil || [expirationDate timeIntervalSinceNow] <= 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)updateRiverFromRequest:(NSURLRequest *)request response:(NSURLResponse *)response data:(NSData *)data;
+{
+    // ASSUME: We have successfully downloaded the River.  Let's deserialize the data, update our River, call the completion handler, and notify our consumers.
+    
+    TSRiver *updatedRiver = [[TSRiver alloc] initWithURL:response.URL];
+    
+    if ([updatedRiver.url isEqual:request.URL] == NO) {
+        updatedRiver.originalURL = request.URL;
+    }
+    
+    updatedRiver.fetchedDate = [NSDate date];
+    
+    NSError *deserializationError;
+    
+    if ([updatedRiver populateRiverFromData:data error:&deserializationError] == NO) {
+        self.lastError = deserializationError;
+    }
+    
+    if (self.lastError == nil) {
+        NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data userInfo:@{ @"updatedDate": updatedRiver.whenRiverUpdatedDate == nil ? [NSDate distantPast] : updatedRiver.whenRiverUpdatedDate } storagePolicy:NSURLCacheStorageAllowed];
+        [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:request];
+        
+        TSRiver *previousRiver = self.river;
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerWillRefreshRiverNotification object:nil userInfo:@{ @"river": self.river }];
+        self.river = updatedRiver;
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerDidRefreshRiverNotification object:nil userInfo:@{ @"river" : self.river, @"previousRiver" : previousRiver}];
+    }
+    
+    if (self.currentTaskCompletionHandler != nil) {
+        self.currentTaskCompletionHandler(self.lastError);
+        self.currentTaskCompletionHandler = nil;
+    }
+}
+
+- (void)userDefaultsDidChange:(NSNotification *)notification;
+{
+    NSString *riverURLString = [[NSUserDefaults standardUserDefaults] stringForKey:TSRiverManagerRiverURLKey];
+    
+    if (IsEmpty(riverURLString)) {
+        return;
+    }
+    
+    NSURL *changedRiverURL = [NSURL URLWithString:riverURLString];
+    
+    if (changedRiverURL == nil) {
+        ALog(@"Invalid River URL was specified [%@].", riverURLString);
+        return;
+    }
+
+    if ([self.river.url isEqual:changedRiverURL] || [self.river.originalURL isEqual:changedRiverURL]) {
+        return;
+    }
+
+    DLog(@"River URL has changed to [%@] from [%@].  Refreshing River.", changedRiverURL, self.river.url);
+    self.river = [[TSRiver alloc] initWithURL:changedRiverURL];
+    [self refreshWithCompletionHandler:nil ignoringCache:YES];
+}
+
+
+#pragma mark -
+#pragma mark API
+
++ (TSRiverManager *)sharedManager;
+{
+    static TSRiverManager *_riverManager;
+    static dispatch_once_t sharedManagerToken;
+    dispatch_once(&sharedManagerToken, ^{
+        _riverManager = [TSRiverManager new];
+    });
+    
+    return _riverManager;
+}
+
+- (void)refreshWithCompletionHandler:(void (^)(NSError *error))completionHandler ignoringCache:(BOOL)ignoringCache;
+{
+    if (self.isLoading) {
+        DLog(@"Superfluous call to refresh river [%@].", self.river);
+        if (completionHandler == nil) {
+            return;
+        }
+        
+        [self.sessionQueue addOperationWithBlock:^{
+            completionHandler([self lastError]);
+        }];
+        return;
+    }
+    
+    if (self.currentTask != nil) {
+        switch (self.currentTask.state) {
+            case NSURLSessionTaskStateSuspended: {
+                DLog(@"Resuming suspended data task [%@].", self.currentTask.taskDescription);
+                [self.currentTask resume];
+                
+                if (completionHandler == nil) {
+                    return;
+                }
+                
+                [self.sessionQueue addOperationWithBlock:^{
+                    completionHandler([self lastError]);
+                }];
+                return;
+            }
+            case NSURLSessionTaskStateRunning: {
+                DLog(@"A task is already running, but we have requested a superfluous one through a race.");
+                
+                if (completionHandler == nil) {
+                    return;
+                }
+                
+                [self.sessionQueue addOperationWithBlock:^{
+                    completionHandler([self lastError]);
+                }];
+                return;
+            }
+            case NSURLSessionTaskStateCanceling:
+            case NSURLSessionTaskStateCompleted:
+                DLog(@"A task in a terminal state was encountered.  Enqueuing a new data task.");
+                break;
+            default:
+                ALog(@"Unexpected task state encountered.  Enqueuing new data task.");
+                break;
+        }
+    }
+    
+    if (ignoringCache == NO && [self shouldRiverBeUpdated] == NO) {
+        DLog(@"River is still current and the cached copy is being used.");
+        [self.sessionQueue addOperationWithBlock:^{
+            if (completionHandler != nil) {
+                completionHandler(nil);
+            }
+        }];
+        return;
+    }
+
+    DLog(@"Performing refresh of River [%@]", self.river);
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.river.url cachePolicy:(ignoringCache ? NSURLRequestReloadIgnoringLocalCacheData : NSURLRequestUseProtocolCachePolicy) timeoutInterval:60];
+    self.lastError = nil;
+    self.isLoading = YES;
+    self.currentTaskCompletionHandler = completionHandler;
+    self.currentTask = [self.session downloadTaskWithRequest:request];
+    [self.currentTask resume];
+}
+
+#pragma mark -
+#pragma mark NSURLSessionDelegate
+
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error;
+{
+    DLog(@"");
+    [self URLSession:session task:self.currentTask didCompleteWithError:error];
+}
+
+- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session;
+{
+    DLog(@"");
+    SOAssert(self.session == session, @"Unknown session was supplied.");
+    
+    TSRiverManagerBackgroundSessionCompletionHandler sessionCompletionHandler = self.sessionCompletionHandler;
+    self.sessionCompletionHandler = nil;
+    
+    if (sessionCompletionHandler != nil) {
+        sessionCompletionHandler();
+    }
+    
+    DLog(@"Background session complete.");
+}
+
+#pragma mark -
+#pragma mark NSURLSessionTaskDelegate
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error;
+{
+    DLog(@"error [%@]", error == nil ? @"(no error)" : error);
+    SOAssert(self.session == session, @"Unknown session was supplied.");
+    SOAssert(self.currentTask == task, @"Unknown task was supplied.");
+    SOAssert(self.currentTask.state != NSURLSessionTaskStateRunning, @"Current task was running at the time of error notification.");
+    
+    self.lastError = error != nil ? error : self.currentTask.error;
+
+    if (error != nil) {
+        if (self.currentTaskCompletionHandler != nil) {
+            self.currentTaskCompletionHandler(error);
+            self.currentTaskCompletionHandler = nil;
+        }
+        
+        self.currentTask = nil;
+        self.isLoading = NO;
+        return;
+    }
+    
+    self.currentTask = nil;
+    self.isLoading = NO;
+}
+
+#pragma mark -
+#pragma mark NSURLSessionDownloadDelegate
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location;
+{
+    DLog(@"");
+    SOAssert(self.session == session, @"Unknown session was supplied.");
+    SOAssert(self.currentTask == downloadTask, @"Unknown task was supplied.");
+    
+    [self updateRiverFromRequest:downloadTask.originalRequest response:downloadTask.response data:[NSData dataWithContentsOfURL:location]];
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes;
+{
+    DLog(@"");
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
+{
+    DLog(@"");
+}
+
+#pragma mark -
+#pragma mark NSObject
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.sessionQueue = [NSOperationQueue new];
+        self.sessionQueue.name = @"TSRiverManager";
+        self.sessionQueue.maxConcurrentOperationCount = 1;
+        self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration backgroundSessionConfiguration:TSRiverManagerURLSessionConfigurationIdentifier] delegate:self delegateQueue:self.sessionQueue];
+        self.river = [self initialRiver];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:NSUserDefaultsDidChangeNotification];
 }
 
 @end
