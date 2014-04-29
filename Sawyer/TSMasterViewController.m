@@ -19,7 +19,6 @@
 @property (nonatomic) id riverDidRefreshObserver;
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
 @property (nonatomic) BOOL showingLastUpdated;
-@property (nonatomic) BOOL didInitialUpdateComplete;
 
 - (NSIndexPath *)recalculateWatermark;
 - (void)deselectTwainRow;
@@ -87,6 +86,8 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (void)updateLatestRiverAndDisplay;
 {
     DLog(@"");
+    SOAssert([NSThread mainThread] == [NSThread currentThread], @"UI update is not occurring on main thread!");
+    
     [self.refreshControl endRefreshing];
     self.river = [[TSRiverManager sharedManager] river];
     [self updateDateDisplay];
@@ -232,38 +233,39 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     [self setDetailViewController:(TSDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController]];
     self.showingLastUpdated = YES;
     [self setHighWatermarkIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:kHighWatermarkIdentifierKey]];
-
     [[self lastUpdatedButton] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:12.0], NSForegroundColorAttributeName : [UIColor blackColor]} forState:UIControlStateNormal];
     [self.tableView setSectionIndexMinimumDisplayRowCount:1];
-    [self prepareDisplayForRiverUpdate];
-    self.didInitialUpdateComplete = NO;
-    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
-        self.didInitialUpdateComplete = YES;
 
+    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
+        DLog(@"Performing initial display of River.  Registering to receive notifications from manager.");
+        
         performOnMainThread(^{
             [self updateLatestRiverAndDisplay];
+
+            self.riverDidRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerDidRefreshRiverNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+                DLog(@"River refresh notification received.  Updating display.");
+                performOnMainThread(^{
+                    [self updateLatestRiverAndDisplay];
+                });
+            }];
         });
     } ignoringCache:NO];
+}
 
-    self.riverDidRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerDidRefreshRiverNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        DLog(@"Did refresh River notification received.  Updating display.");
-        
-        if (self.didInitialUpdateComplete == NO) {
-            return;
-        }
-        
-        performOnMainThread(^{
-            [self updateLatestRiverAndDisplay];
-        });
-    }];
+- (void)viewDidAppear:(BOOL)animated;
+{
+    if (self.riverDidRefreshObserver == nil) {
+        [self prepareDisplayForRiverUpdate];
+    }
     
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
 {
+    [super didReceiveMemoryWarning];
     [[NSNotificationCenter defaultCenter] removeObserver:self.riverDidRefreshObserver];
     [self setRiver:nil];
-    [super didReceiveMemoryWarning];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;

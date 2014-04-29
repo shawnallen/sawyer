@@ -59,21 +59,19 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 
 - (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
 {
-    __block UIWebView *deserializationWebView;
+    __block NSDictionary *newRiver;
     
     performOnMainThread(^{
-        deserializationWebView = [[UIWebView alloc] init];
+        UIWebView *deserializationWebView = [[UIWebView alloc] init];
+        NSString *riverJavaScript = [NSString stringWithFormat:@"function %@(river){return JSON.stringify(river);};%@;", self.paddingFunctionName, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+        
+        NSString *riverResult = [deserializationWebView stringByEvaluatingJavaScriptFromString:riverJavaScript];
+        newRiver = [NSJSONSerialization JSONObjectWithData:[riverResult dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] options:0 error:error];
     });
     
-    NSString *riverJavaScript = [NSString stringWithFormat:@"function %@(river){return JSON.stringify(river);};%@;", self.paddingFunctionName, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-    
-    __block NSString *riverResult;
-    
-    performOnMainThread(^{
-        riverResult = [deserializationWebView stringByEvaluatingJavaScriptFromString:riverJavaScript];
-    });
-    
-    NSDictionary *newRiver = [NSJSONSerialization JSONObjectWithData:[riverResult dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES] options:0 error:error];
+    if (IsEmpty(newRiver)) {
+        return *error != nil;
+    }
     
     [self setWhenRiverUpdatedDate:[NSDate dateFromHttpDate:[newRiver valueForKeyPath:@"metadata.whenGMT"]]];
     [self setVersion:[newRiver valueForKeyPath:@"metadata.version"]];
@@ -294,6 +292,7 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 
 - (void)updateRiverFromRequest:(NSURLRequest *)request response:(NSURLResponse *)response data:(NSData *)data;
 {
+    DLog(@"");
     // ASSUME: We have successfully downloaded the River.  Let's deserialize the data, update our River, call the completion handler, and notify our consumers.
     
     TSRiver *updatedRiver = [[TSRiver alloc] initWithURL:response.URL];
@@ -467,7 +466,12 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 {
     DLog(@"error [%@]", error == nil ? @"(no error)" : error);
     SOAssert(self.session == session, @"Unknown session was supplied.");
-    SOAssert(self.currentTask == task, @"Unknown task was supplied.");
+    
+    if (self.currentTask != task) {
+        DLog(@"Reestablishing backgrounded, completed download task.");
+        self.currentTask = (NSURLSessionDownloadTask *)task;
+    }
+
     SOAssert(self.currentTask.state != NSURLSessionTaskStateRunning, @"Current task was running at the time of error notification.");
     
     self.lastError = error != nil ? error : self.currentTask.error;
@@ -494,8 +498,6 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 {
     DLog(@"");
     SOAssert(self.session == session, @"Unknown session was supplied.");
-    SOAssert(self.currentTask == downloadTask, @"Unknown task was supplied.");
-    
     [self updateRiverFromRequest:downloadTask.originalRequest response:downloadTask.response data:[NSData dataWithContentsOfURL:location]];
 }
 

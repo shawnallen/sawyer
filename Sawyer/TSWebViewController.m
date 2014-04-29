@@ -69,6 +69,7 @@
 - (void)awakeFromNib;
 {
     [self addObserver:self forKeyPath:@"link" options:NSKeyValueObservingOptionNew context:nil];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
 }
 
 - (void)viewDidLoad;
