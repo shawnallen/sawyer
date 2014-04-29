@@ -38,7 +38,7 @@
         return;
     }
     
-    ((id (*)(id, SEL, UIStoryboardSegue *, id))objc_msgSend)(self, identifierSelector, segue, sender);
+    ((int (*)(id, SEL, UIStoryboardSegue *, id))objc_msgSend)(self, identifierSelector, segue, sender);
 }
 
 @end
