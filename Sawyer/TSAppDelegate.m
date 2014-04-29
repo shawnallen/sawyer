@@ -20,6 +20,7 @@
         splitViewController.delegate = (id)navigationController.topViewController;
     }
     
+    [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     return YES;
 }
 
