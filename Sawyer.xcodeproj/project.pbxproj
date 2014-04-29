@@ -13,9 +13,6 @@
 		29649CD5175F7B7B005C4466 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 29649CD3175F7B7B005C4466 /* InfoPlist.strings */; };
 		29649CD7175F7B7B005C4466 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29649CD6175F7B7B005C4466 /* main.m */; };
 		29649CDB175F7B7B005C4466 /* TSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29649CDA175F7B7B005C4466 /* TSAppDelegate.m */; };
-		29649CDD175F7B7B005C4466 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 29649CDC175F7B7B005C4466 /* Default.png */; };
-		29649CDF175F7B7B005C4466 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29649CDE175F7B7B005C4466 /* Default@2x.png */; };
-		29649CE1175F7B7B005C4466 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 29649CE0175F7B7B005C4466 /* Default-568h@2x.png */; };
 		29649CE4175F7B7B005C4466 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29649CE2175F7B7B005C4466 /* MainStoryboard_iPhone.storyboard */; };
 		29649CE7175F7B7B005C4466 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 29649CE5175F7B7B005C4466 /* MainStoryboard_iPad.storyboard */; };
 		29649CEA175F7B7B005C4466 /* TSMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29649CE9175F7B7B005C4466 /* TSMasterViewController.m */; };
@@ -27,6 +24,9 @@
 		29CBB376190B03660031403F /* TSActivityUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB375190B03660031403F /* TSActivityUtilities.m */; };
 		29CBB378190B20010031403F /* TUSafariActivity.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 29CBB377190B20010031403F /* TUSafariActivity.bundle */; };
 		29FC9D7C190FEF60000FE91A /* NSDate+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */; };
+		29FC9D8B19102127000FE91A /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 29FC9D8219102127000FE91A /* iTunesArtwork */; };
+		29FC9D8C19102127000FE91A /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 29FC9D8319102127000FE91A /* iTunesArtwork@2x */; };
+		29FC9D9219102175000FE91A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29FC9D9119102175000FE91A /* Images.xcassets */; };
 		5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5242705D1760F55E00DF3CFE /* Security.framework */; };
 		5242706017610A5D00DF3CFE /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5242705F17610A5D00DF3CFE /* Settings.bundle */; };
 		52AE68E4178F2E7300FB7F17 /* TUSafariActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 52AE68DC178F2E7300FB7F17 /* TUSafariActivity.m */; };
@@ -43,9 +43,6 @@
 		29649CD8175F7B7B005C4466 /* Sawyer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sawyer-Prefix.pch"; sourceTree = "<group>"; };
 		29649CD9175F7B7B005C4466 /* TSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TSAppDelegate.h; sourceTree = "<group>"; };
 		29649CDA175F7B7B005C4466 /* TSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TSAppDelegate.m; sourceTree = "<group>"; };
-		29649CDC175F7B7B005C4466 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		29649CDE175F7B7B005C4466 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		29649CE0175F7B7B005C4466 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		29649CE3175F7B7B005C4466 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		29649CE6175F7B7B005C4466 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		29649CE8175F7B7B005C4466 /* TSMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TSMasterViewController.h; sourceTree = "<group>"; };
@@ -66,6 +63,9 @@
 		29CBB377190B20010031403F /* TUSafariActivity.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUSafariActivity.bundle; sourceTree = "<group>"; };
 		29FC9D7A190FEF60000FE91A /* NSDate+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+HTTP.h"; sourceTree = "<group>"; };
 		29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HTTP.m"; sourceTree = "<group>"; };
+		29FC9D8219102127000FE91A /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		29FC9D8319102127000FE91A /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
+		29FC9D9119102175000FE91A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		521DCA771770B7D500865F44 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5242705D1760F55E00DF3CFE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		5242705F17610A5D00DF3CFE /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -141,6 +141,7 @@
 				2986AD7F176030EB000CEC22 /* TSFeedItemTableViewCell.h */,
 				2986AD80176030EB000CEC22 /* TSFeedItemTableViewCell.m */,
 				5242701F1760F52000DF3CFE /* ExternalFrameworks */,
+				29FC9D9119102175000FE91A /* Images.xcassets */,
 				29649CD1175F7B7B005C4466 /* Supporting Files */,
 			);
 			path = Sawyer;
@@ -149,14 +150,13 @@
 		29649CD1175F7B7B005C4466 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				29FC9D8219102127000FE91A /* iTunesArtwork */,
+				29FC9D8319102127000FE91A /* iTunesArtwork@2x */,
 				2986AD7B175FE478000CEC22 /* SOPrefix.h */,
 				29649CD2175F7B7B005C4466 /* Sawyer-Info.plist */,
 				29649CD3175F7B7B005C4466 /* InfoPlist.strings */,
 				29649CD6175F7B7B005C4466 /* main.m */,
 				29649CD8175F7B7B005C4466 /* Sawyer-Prefix.pch */,
-				29649CDC175F7B7B005C4466 /* Default.png */,
-				29649CDE175F7B7B005C4466 /* Default@2x.png */,
-				29649CE0175F7B7B005C4466 /* Default-568h@2x.png */,
 				5242705F17610A5D00DF3CFE /* Settings.bundle */,
 			);
 			name = "Supporting Files";
@@ -264,11 +264,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				29649CD5175F7B7B005C4466 /* InfoPlist.strings in Resources */,
-				29649CDD175F7B7B005C4466 /* Default.png in Resources */,
-				29649CDF175F7B7B005C4466 /* Default@2x.png in Resources */,
+				29FC9D8C19102127000FE91A /* iTunesArtwork@2x in Resources */,
 				29CBB378190B20010031403F /* TUSafariActivity.bundle in Resources */,
-				29649CE1175F7B7B005C4466 /* Default-568h@2x.png in Resources */,
+				29FC9D9219102175000FE91A /* Images.xcassets in Resources */,
 				29649CE4175F7B7B005C4466 /* MainStoryboard_iPhone.storyboard in Resources */,
+				29FC9D8B19102127000FE91A /* iTunesArtwork in Resources */,
 				29649CE7175F7B7B005C4466 /* MainStoryboard_iPad.storyboard in Resources */,
 				5242706017610A5D00DF3CFE /* Settings.bundle in Resources */,
 			);
@@ -386,8 +386,10 @@
 		29649CF1175F7B7B005C4466 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
@@ -402,8 +404,10 @@
 		29649CF2175F7B7B005C4466 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sawyer/Sawyer-Prefix.pch";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
