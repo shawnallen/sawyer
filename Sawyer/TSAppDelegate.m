@@ -13,7 +13,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef DEBUG
+#ifndef DEBUG
     [Crashlytics startWithAPIKey:@"819f91f18b511e6704b700d268bbbc30345df256"];
 #endif
     

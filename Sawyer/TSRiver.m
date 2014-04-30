@@ -381,8 +381,8 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     if (self.currentTask != nil) {
         switch (self.currentTask.state) {
             case NSURLSessionTaskStateSuspended: {
-                DLog(@"Resuming suspended data task [%@].", self.currentTask.taskDescription);
-                [self.currentTask resume];
+                DLog(@"Canceling suspended data task [%@].", self.currentTask.taskDescription);
+                [self.currentTask cancel];
                 
                 if (completionHandler == nil) {
                     return;
