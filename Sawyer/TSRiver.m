@@ -295,7 +295,27 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     DLog(@"");
     // ASSUME: We have successfully downloaded the River.  Let's deserialize the data, update our River, call the completion handler, and notify our consumers.
     
+    if (response == nil) {
+        DLog(@"Response is empty, no update will be performed.");
+        return;
+    }
+    
+    if (data == nil) {
+        DLog(@"Data is empty, no update will be performed.");
+        return;
+    }
+    
+    if (request == nil) {
+        DLog(@"Request is empty, no update will be performed.");
+        return;
+    }
+    
     TSRiver *updatedRiver = [[TSRiver alloc] initWithURL:response.URL];
+    
+    if (updatedRiver == nil) {
+        ALog(@"Unable to allocate a new River instance.  No update will be performed");
+        return;
+    }
     
     if ([updatedRiver.url isEqual:request.URL] == NO) {
         updatedRiver.originalURL = request.URL;
@@ -510,6 +530,12 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 {
     DLog(@"");
     SOAssert(self.session == session, @"Unknown session was supplied.");
+    
+    if (downloadTask.error != nil) {
+        DLog(@"Error occurred during download [%@].", [downloadTask.error localizedDescription]);
+        return;
+    }
+    
     [self updateRiverFromRequest:downloadTask.originalRequest response:downloadTask.response data:[NSData dataWithContentsOfURL:location]];
 }
 

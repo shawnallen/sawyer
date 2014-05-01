@@ -11,6 +11,12 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import <Crashlytics/Crashlytics.h>
+
     #import "SOPrefix.h"
+
+#ifndef DEBUG
+    #import <Crashlytics/Crashlytics.h>
+    #define NSLog CLSLog
+#endif
+
 #endif
