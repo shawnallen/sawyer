@@ -320,7 +320,9 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     }
     
     if (self.currentTaskCompletionHandler != nil) {
-        self.currentTaskCompletionHandler(self.lastError);
+        performOnMainThread(^{
+            self.currentTaskCompletionHandler(self.lastError);
+        });
         self.currentTaskCompletionHandler = nil;
     }
 }
@@ -373,7 +375,9 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
         }
         
         [self.sessionQueue addOperationWithBlock:^{
-            completionHandler([self lastError]);
+            performOnMainThread(^{
+                completionHandler([self lastError]);
+            });
         }];
         return;
     }
@@ -389,7 +393,9 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
                 }
                 
                 [self.sessionQueue addOperationWithBlock:^{
-                    completionHandler([self lastError]);
+                    performOnMainThread(^{
+                        completionHandler([self lastError]);
+                    });
                 }];
                 return;
             }
@@ -401,7 +407,9 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
                 }
                 
                 [self.sessionQueue addOperationWithBlock:^{
-                    completionHandler([self lastError]);
+                    performOnMainThread(^{
+                        completionHandler([self lastError]);
+                    });
                 }];
                 return;
             }
@@ -419,7 +427,9 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
         DLog(@"River is still current and the cached copy is being used.");
         [self.sessionQueue addOperationWithBlock:^{
             if (completionHandler != nil) {
-                completionHandler(nil);
+                performOnMainThread(^{
+                    completionHandler(nil);
+                });
             }
         }];
         return;
@@ -478,7 +488,9 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 
     if (error != nil) {
         if (self.currentTaskCompletionHandler != nil) {
-            self.currentTaskCompletionHandler(error);
+            performOnMainThread(^{
+                self.currentTaskCompletionHandler(error);
+            });
             self.currentTaskCompletionHandler = nil;
         }
         

@@ -68,7 +68,9 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (IBAction)pulledToRefresh:(id)sender;
 {
     [self prepareDisplayForRiverUpdate];
-    [[TSRiverManager sharedManager] refreshWithCompletionHandler:nil ignoringCache:YES];
+    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
+        [self updateLatestRiverAndDisplay];
+    } ignoringCache:YES];
 }
 
 - (void)prepareDisplayForRiverUpdate;
@@ -235,20 +237,23 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     [self setHighWatermarkIdentifier:[[NSUserDefaults standardUserDefaults] stringForKey:kHighWatermarkIdentifierKey]];
     [[self lastUpdatedButton] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:12.0], NSForegroundColorAttributeName : [UIColor blackColor]} forState:UIControlStateNormal];
     [self.tableView setSectionIndexMinimumDisplayRowCount:1];
-
+    
     [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
         DLog(@"Performing initial display of River.  Registering to receive notifications from manager.");
+        [self updateLatestRiverAndDisplay];
         
-        performOnMainThread(^{
+        self.riverDidRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerDidRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+            TSRiver *refreshedRiver = [note userInfo][@"river"];
+            SOAssert(refreshedRiver != nil, @"Recieved a River refresh without a River object.");
+            
+            if (self.river == refreshedRiver || [self.river.fetchedDate isEqualToDate:refreshedRiver.fetchedDate]) {
+                DLog(@"River refresh notification received.  Display is already up-to-date.");
+                return;
+            }
+            
+            DLog(@"River refresh notification received.  Updating display.");
             [self updateLatestRiverAndDisplay];
-
-            self.riverDidRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerDidRefreshRiverNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-                DLog(@"River refresh notification received.  Updating display.");
-                performOnMainThread(^{
-                    [self updateLatestRiverAndDisplay];
-                });
-            }];
-        });
+        }];
     } ignoringCache:NO];
 }
 
