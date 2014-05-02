@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		292D7EBE1911520C006404B5 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 292D7EBD1911520C006404B5 /* Crashlytics.framework */; };
 		29649CCB175F7B7B005C4466 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29649CCA175F7B7B005C4466 /* UIKit.framework */; };
 		29649CCD175F7B7B005C4466 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29649CCC175F7B7B005C4466 /* Foundation.framework */; };
 		29649CCF175F7B7B005C4466 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29649CCE175F7B7B005C4466 /* CoreGraphics.framework */; };
@@ -34,7 +33,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		292D7EBD1911520C006404B5 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		29649CC7175F7B7B005C4466 /* Sawyer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sawyer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29649CCA175F7B7B005C4466 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		29649CCC175F7B7B005C4466 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -81,7 +79,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */,
-				292D7EBE1911520C006404B5 /* Crashlytics.framework in Frameworks */,
 				29649CCB175F7B7B005C4466 /* UIKit.framework in Frameworks */,
 				29649CCD175F7B7B005C4466 /* Foundation.framework in Frameworks */,
 				29649CCF175F7B7B005C4466 /* CoreGraphics.framework in Frameworks */,
@@ -111,7 +108,6 @@
 		29649CC9175F7B7B005C4466 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				292D7EBD1911520C006404B5 /* Crashlytics.framework */,
 				521DCA771770B7D500865F44 /* QuartzCore.framework */,
 				29649CCA175F7B7B005C4466 /* UIKit.framework */,
 				29649CCC175F7B7B005C4466 /* Foundation.framework */,
@@ -194,7 +190,6 @@
 				29649CC3175F7B7B005C4466 /* Sources */,
 				29649CC4175F7B7B005C4466 /* Frameworks */,
 				29649CC5175F7B7B005C4466 /* Resources */,
-				292D7EBC191151EE006404B5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -281,22 +276,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		292D7EBC191151EE006404B5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run $CRASHLYTICS_API_KEY";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		29649CC3175F7B7B005C4466 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -360,7 +339,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CRASHLYTICS_API_KEY = 819f91f18b511e6704b700d268bbbc30345df256;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -368,7 +346,6 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "CRASHLYTICS_API_KEY=$(CRASHLYTICS_API_KEY)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -394,9 +371,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
-				CRASHLYTICS_API_KEY = 819f91f18b511e6704b700d268bbbc30345df256;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "CRASHLYTICS_API_KEY=$(CRASHLYTICS_API_KEY)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -413,7 +388,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CRASHLYTICS_API_KEY = "";
 				CURRENT_PROJECT_VERSION = 18;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -435,7 +409,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CRASHLYTICS_API_KEY = "";
 				CURRENT_PROJECT_VERSION = 18;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
