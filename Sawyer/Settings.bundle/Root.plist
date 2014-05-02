@@ -5,8 +5,18 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
+			<key>DefaultValue</key>
+			<string>0.8 (18)</string>
+			<key>Key</key>
+			<string>app_version</string>
 			<key>Title</key>
-			<string>River2</string>
+			<string>Version</string>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+		</dict>
+		<dict>
+			<key>Title</key>
+			<string>River JavaScript URL</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

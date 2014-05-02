@@ -392,15 +392,14 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 {
     if (self.isLoading) {
         DLog(@"Superfluous call to refresh river [%@].", self.river);
-        if (completionHandler == nil) {
-            return;
+        if (completionHandler != nil) {
+            [self.sessionQueue addOperationWithBlock:^{
+                performOnMainThread(^{
+                    completionHandler([self lastError]);
+                });
+            }];
         }
         
-        [self.sessionQueue addOperationWithBlock:^{
-            performOnMainThread(^{
-                completionHandler([self lastError]);
-            });
-        }];
         return;
     }
     
@@ -409,30 +408,18 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
             case NSURLSessionTaskStateSuspended: {
                 DLog(@"Canceling suspended data task [%@].", self.currentTask.taskDescription);
                 [self.currentTask cancel];
-                
-                if (completionHandler == nil) {
-                    return;
-                }
-                
-                [self.sessionQueue addOperationWithBlock:^{
-                    performOnMainThread(^{
-                        completionHandler([self lastError]);
-                    });
-                }];
-                return;
             }
             case NSURLSessionTaskStateRunning: {
                 DLog(@"A task is already running, but we have requested a superfluous one through a race.");
                 
-                if (completionHandler == nil) {
-                    return;
+                if (completionHandler != nil) {
+                    [self.sessionQueue addOperationWithBlock:^{
+                        performOnMainThread(^{
+                            completionHandler([self lastError]);
+                        });
+                    }];
                 }
                 
-                [self.sessionQueue addOperationWithBlock:^{
-                    performOnMainThread(^{
-                        completionHandler([self lastError]);
-                    });
-                }];
                 return;
             }
             case NSURLSessionTaskStateCanceling:
@@ -447,23 +434,24 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     
     if (ignoringCache == NO && [self shouldRiverBeUpdated] == NO) {
         DLog(@"River is still current and the cached copy is being used.");
-        [self.sessionQueue addOperationWithBlock:^{
-            if (completionHandler != nil) {
+        if (completionHandler != nil) {
+            [self.sessionQueue addOperationWithBlock:^{
                 performOnMainThread(^{
                     completionHandler(nil);
                 });
-            }
-        }];
+            }];
+        }
+        
         return;
     }
 
     DLog(@"Performing refresh of River [%@]", self.river);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:self.river.url cachePolicy:(ignoringCache ? NSURLRequestReloadIgnoringLocalCacheData : NSURLRequestUseProtocolCachePolicy) timeoutInterval:60];
-    self.lastError = nil;
-    self.isLoading = YES;
     self.currentTaskCompletionHandler = completionHandler;
     self.currentTask = [self.session downloadTaskWithRequest:request];
+    self.lastError = nil;
+    self.isLoading = YES;
     [self.currentTask resume];
 }
 
@@ -496,11 +484,11 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error;
 {
-    DLog(@"error [%@]", error == nil ? @"(no error)" : error);
     SOAssert(self.session == session, @"Unknown session was supplied.");
-    
+
     if (self.currentTask != task) {
         DLog(@"Reestablishing backgrounded, completed download task.");
+        SOAssert(self.currentTask == nil, @"A download task was present when the session presented a different, completed one.  Undefined behavior will result.");
         self.currentTask = (NSURLSessionDownloadTask *)task;
     }
 
@@ -515,10 +503,6 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
             });
             self.currentTaskCompletionHandler = nil;
         }
-        
-        self.currentTask = nil;
-        self.isLoading = NO;
-        return;
     }
     
     self.currentTask = nil;
