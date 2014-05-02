@@ -16,7 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *lastUpdatedButton;
 @property (nonatomic) NSString *highWatermarkIdentifier;
 @property (nonatomic) TSRiver *river;
-@property (nonatomic) id riverDidRefreshObserver;
+@property (nonatomic) id riverBeganRefreshObserver;
+@property (nonatomic) id riverCompletedRefreshObserver;
 @property (nonatomic) NSIndexPath *watermarkIndexPath;
 @property (nonatomic) BOOL showingLastUpdated;
 
@@ -67,10 +68,7 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 
 - (IBAction)pulledToRefresh:(id)sender;
 {
-    [self prepareDisplayForRiverUpdate];
-    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
-        [self updateLatestRiverAndDisplay];
-    } ignoringCache:YES];
+    [[TSRiverManager sharedManager] refreshRiverIgnoringCache:YES];
 }
 
 - (void)prepareDisplayForRiverUpdate;
@@ -93,13 +91,12 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     [self.refreshControl endRefreshing];
     self.river = [[TSRiverManager sharedManager] river];
     [self updateDateDisplay];
-    
-    if ([TSRiverManager sharedManager].lastError != nil) {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[[TSRiverManager sharedManager].lastError description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
-    };
-    
     [self recalculateWatermark];
     [self.tableView reloadData];
+
+    if ([TSRiverManager sharedManager].lastError != nil) {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[[TSRiverManager sharedManager].lastError description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+    }
 }
 
 - (IBAction)showTwain:(id)sender
@@ -238,38 +235,35 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     [[self lastUpdatedButton] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:12.0], NSForegroundColorAttributeName : [UIColor blackColor]} forState:UIControlStateNormal];
     [self.tableView setSectionIndexMinimumDisplayRowCount:1];
     
-    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
-        DLog(@"Performing initial display of River.  Registering to receive notifications from manager.");
-        [self updateLatestRiverAndDisplay];
-        
-        self.riverDidRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerDidRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-            TSRiver *refreshedRiver = [note userInfo][@"river"];
-            SOAssert(refreshedRiver != nil, @"Recieved a River refresh without a River object.");
-            
-            if (self.river == refreshedRiver || [self.river.fetchedDate isEqualToDate:refreshedRiver.fetchedDate]) {
-                DLog(@"River refresh notification received.  Display is already up-to-date.");
-                return;
-            }
-            
-            DLog(@"River refresh notification received.  Updating display.");
-            [self updateLatestRiverAndDisplay];
-        }];
-    } ignoringCache:NO];
-}
-
-- (void)viewDidAppear:(BOOL)animated;
-{
-    if (self.riverDidRefreshObserver == nil) {
+    self.riverBeganRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerBeganRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self prepareDisplayForRiverUpdate];
+    }];
+    
+    self.riverCompletedRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        TSRiver *refreshedRiver = note.userInfo[@"river"];
+        SOAssert(refreshedRiver != nil, @"Recieved a River refresh without a River object.");
+        
+        if (self.river == refreshedRiver || [self.river.fetchedDate isEqualToDate:refreshedRiver.fetchedDate]) {
+            DLog(@"River refresh notification received.  Display is already up-to-date.");
+            return;
+        }
+        
+        DLog(@"River refresh notification received.  Updating display.");
+        [self updateLatestRiverAndDisplay];
+    }];
+    
+    if ([[TSRiverManager sharedManager] refreshRiverIgnoringCache:NO] == YES) {
+        return;
     }
     
-    [super viewDidAppear:animated];
+    [self updateLatestRiverAndDisplay];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    [[NSNotificationCenter defaultCenter] removeObserver:self.riverDidRefreshObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.riverBeganRefreshObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.riverCompletedRefreshObserver];
     [self setRiver:nil];
 }
 

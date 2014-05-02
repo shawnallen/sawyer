@@ -201,11 +201,13 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 
 @end
 
+NSString * const TSRiverManagerBeganRefreshRiverNotification = @"TSRiverManagerBeganRefreshRiverNotification";
 NSString * const TSRiverManagerWillRefreshRiverNotification = @"TSRiverManagerWillRefreshRiverNotification";
 NSString * const TSRiverManagerDidRefreshRiverNotification = @"TSRiverManagerDidRefreshRiverNotification";
 NSString * const TSRiverManagerURLSessionConfigurationIdentifier = @"TSRiverManagerURLSessionConfigurationIdentifier";
+NSString * const TSRiverManagerCompletedRefreshRiverNotification = @"TSRiverManagerCompletedRefreshRiverNotification";
 NSString * const TSRiverManagerRiverURLKey = @"river_url";
-NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interval
+NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interval
 
 @interface TSRiverManager () <NSURLSessionDelegate, NSURLSessionDownloadDelegate>
 @property (nonatomic, readwrite) TSRiver *river;
@@ -214,7 +216,6 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 @property (nonatomic) NSURLSession *session;
 @property (nonatomic) NSOperationQueue *sessionQueue;
 @property (nonatomic) NSURLSessionDownloadTask *currentTask;
-@property (nonatomic, copy) void (^currentTaskCompletionHandler)(NSError *error);
 
 - (TSRiver *)initialRiver;
 - (BOOL)shouldRiverBeUpdated;
@@ -229,6 +230,7 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 
 - (TSRiver *)initialRiver;
 {
+    DLog(@"");
     NSString *riverURLString = [[NSUserDefaults standardUserDefaults] stringForKey:TSRiverManagerRiverURLKey];
     
     if (IsEmpty(riverURLString)) {
@@ -340,13 +342,6 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
         self.river = updatedRiver;
         [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerDidRefreshRiverNotification object:nil userInfo:@{ @"river" : self.river, @"previousRiver" : previousRiver}];
     }
-    
-    if (self.currentTaskCompletionHandler != nil) {
-        performOnMainThread(^{
-            self.currentTaskCompletionHandler(self.lastError);
-        });
-        self.currentTaskCompletionHandler = nil;
-    }
 }
 
 - (void)userDefaultsDidChange:(NSNotification *)notification;
@@ -370,7 +365,7 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
 
     DLog(@"River URL has changed to [%@] from [%@].  Refreshing River.", changedRiverURL, self.river.url);
     self.river = [[TSRiver alloc] initWithURL:changedRiverURL];
-    [self refreshWithCompletionHandler:nil ignoringCache:YES];
+    [self refreshRiverIgnoringCache:YES];
 }
 
 
@@ -388,40 +383,22 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     return _riverManager;
 }
 
-- (void)refreshWithCompletionHandler:(void (^)(NSError *error))completionHandler ignoringCache:(BOOL)ignoringCache;
+- (BOOL)refreshRiverIgnoringCache:(BOOL)ignoringCache;
 {
     if (self.isLoading) {
         DLog(@"Superfluous call to refresh river [%@].", self.river);
-        if (completionHandler != nil) {
-            [self.sessionQueue addOperationWithBlock:^{
-                performOnMainThread(^{
-                    completionHandler([self lastError]);
-                });
-            }];
-        }
-        
-        return;
+        return NO;
     }
     
     if (self.currentTask != nil) {
         switch (self.currentTask.state) {
-            case NSURLSessionTaskStateSuspended: {
+            case NSURLSessionTaskStateSuspended:
                 DLog(@"Canceling suspended data task [%@].", self.currentTask.taskDescription);
                 [self.currentTask cancel];
-            }
-            case NSURLSessionTaskStateRunning: {
+                return NO;
+            case NSURLSessionTaskStateRunning:
                 DLog(@"A task is already running, but we have requested a superfluous one through a race.");
-                
-                if (completionHandler != nil) {
-                    [self.sessionQueue addOperationWithBlock:^{
-                        performOnMainThread(^{
-                            completionHandler([self lastError]);
-                        });
-                    }];
-                }
-                
-                return;
-            }
+                return NO;
             case NSURLSessionTaskStateCanceling:
             case NSURLSessionTaskStateCompleted:
                 DLog(@"A task in a terminal state was encountered.  Enqueuing a new data task.");
@@ -434,25 +411,18 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     
     if (ignoringCache == NO && [self shouldRiverBeUpdated] == NO) {
         DLog(@"River is still current and the cached copy is being used.");
-        if (completionHandler != nil) {
-            [self.sessionQueue addOperationWithBlock:^{
-                performOnMainThread(^{
-                    completionHandler(nil);
-                });
-            }];
-        }
-        
-        return;
+        return NO;
     }
 
     DLog(@"Performing refresh of River [%@]", self.river);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:self.river.url cachePolicy:(ignoringCache ? NSURLRequestReloadIgnoringLocalCacheData : NSURLRequestUseProtocolCachePolicy) timeoutInterval:60];
-    self.currentTaskCompletionHandler = completionHandler;
     self.currentTask = [self.session downloadTaskWithRequest:request];
     self.lastError = nil;
     self.isLoading = YES;
     [self.currentTask resume];
+    [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerBeganRefreshRiverNotification object:nil userInfo:@{ @"river": self.river }];
+    return YES;
 }
 
 #pragma mark -
@@ -495,18 +465,16 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     SOAssert(self.currentTask.state != NSURLSessionTaskStateRunning, @"Current task was running at the time of error notification.");
     
     self.lastError = error != nil ? error : self.currentTask.error;
-
-    if (error != nil) {
-        if (self.currentTaskCompletionHandler != nil) {
-            performOnMainThread(^{
-                self.currentTaskCompletionHandler(error);
-            });
-            self.currentTaskCompletionHandler = nil;
-        }
-    }
-    
     self.currentTask = nil;
     self.isLoading = NO;
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:@{ @"river" : self.river }];
+    
+    if (error != nil) {
+        userInfo[@"error"] = error;
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerCompletedRefreshRiverNotification object:nil userInfo:userInfo];
 }
 
 #pragma mark -

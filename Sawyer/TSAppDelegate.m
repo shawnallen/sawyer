@@ -9,6 +9,10 @@
 #import "TSAppDelegate.h"
 #import "TSRiver.h"
 
+@interface TSAppDelegate ()
+@property (nonatomic) id refreshRiverObserver;
+@end
+
 @implementation TSAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -33,13 +37,26 @@
     DLog(@"");
     NSDate *whenRiverUpdatedDate = [TSRiverManager sharedManager].river.whenRiverUpdatedDate;
     
-    [[TSRiverManager sharedManager] refreshWithCompletionHandler:^(NSError *error) {
-        if (error != nil) {
-            completionHandler(UIBackgroundFetchResultFailed);
-        }
+    self.refreshRiverObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        NSError *error = note.userInfo[@"error"];
         
-        completionHandler([whenRiverUpdatedDate compare:[TSRiverManager sharedManager].river.whenRiverUpdatedDate] == NSOrderedSame ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData);
-    } ignoringCache:NO];
+        if (error != nil) {
+            DLog(@"Background fetch failed.");
+            completionHandler(UIBackgroundFetchResultFailed);
+        } else {
+            DLog(@"Background fetch successful.");
+            completionHandler([whenRiverUpdatedDate compare:[TSRiverManager sharedManager].river.whenRiverUpdatedDate] == NSOrderedSame ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData);
+        }
+
+        [[NSNotificationCenter defaultCenter] removeObserver:self.refreshRiverObserver];
+        self.refreshRiverObserver = nil;
+    }];
+    
+    if ([[TSRiverManager sharedManager] refreshRiverIgnoringCache:NO] == NO) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self.refreshRiverObserver];
+        self.refreshRiverObserver = nil;
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;

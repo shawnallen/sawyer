@@ -51,8 +51,10 @@
 
 @end
 
+extern NSString * const TSRiverManagerBeganRefreshRiverNotification;
 extern NSString * const TSRiverManagerWillRefreshRiverNotification;
 extern NSString * const TSRiverManagerDidRefreshRiverNotification;
+extern NSString * const TSRiverManagerCompletedRefreshRiverNotification;
 extern NSString * const TSRiverDefaultURLString;
 extern NSString * const TSRiverManagerURLSessionConfigurationIdentifier;
 typedef void(^TSRiverManagerBackgroundSessionCompletionHandler)();
@@ -66,6 +68,6 @@ typedef void(^TSRiverManagerBackgroundSessionCompletionHandler)();
 
 + (TSRiverManager *)sharedManager;
 
-- (void)refreshWithCompletionHandler:(void (^)(NSError *error))completionHandler ignoringCache:(BOOL)ignoringCache;
+- (BOOL)refreshRiverIgnoringCache:(BOOL)ignoringCache;
 
 @end
