@@ -248,6 +248,8 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 30;  // 30 minute time interva
     
     if (cachedResponse != nil) {
         NSError *error;
+        NSHTTPURLResponse *response = (NSHTTPURLResponse *)cachedResponse.response;
+        initialRiver.fetchedDate = [NSDate dateFromHttpDate:response.allHeaderFields[@"Date"]];
         if ([initialRiver populateRiverFromData:cachedResponse.data error:&error] == NO) {
             ALog(@"Error occurred when populating initial River [%@]", [error localizedDescription]);
             return [[TSRiver alloc] initWithURL:riverURL];
