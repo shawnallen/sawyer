@@ -268,9 +268,13 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     
     self.riverCompletedRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         TSRiver *refreshedRiver = note.userInfo[@"river"];
-        SOAssert(refreshedRiver != nil, @"Recieved a River refresh without a River object.");
-        
         [self cancelRiverRefreshWatchdog];
+        
+        if (refreshedRiver == nil) {
+            DLog(@"River refresh notification received without a new River.  Updating UI with current River.");
+            [self updateDisplayFollowingRiverUpdate];
+            return;
+        }
         
         if (self.river == refreshedRiver || [self.river.fetchedDate isEqualToDate:refreshedRiver.fetchedDate]) {
             DLog(@"River refresh notification received.  Display is already up-to-date.");

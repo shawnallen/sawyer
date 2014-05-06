@@ -458,11 +458,15 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
 
     if (self.currentTask != task) {
         DLog(@"Reestablishing backgrounded, completed download task.");
-        SOAssert(self.currentTask == nil, @"A download task was present when the session presented a different, completed one.  Undefined behavior will result.");
+        
+        if (self.currentTask != nil) {
+            DLog(@"A download task was present when the session presented a different, completed one.  Undefined behavior will result.");
+        }
+        
         self.currentTask = (NSURLSessionDownloadTask *)task;
     }
 
-    SOAssert(self.currentTask.state != NSURLSessionTaskStateRunning, @"Current task was running at the time of error notification.");
+    SOAssert(self.currentTask.state != NSURLSessionTaskStateRunning, @"Current task was running at the time of completion notification.");
     
     self.lastError = error != nil ? error : self.currentTask.error;
     self.currentTask = nil;
