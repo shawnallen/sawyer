@@ -468,7 +468,7 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     self.currentTask = nil;
     self.isLoading = NO;
     
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:@{ @"river" : self.river }];
+    NSMutableDictionary *userInfo = self.river == nil ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:@{ @"river" : self.river }];
     
     if (error != nil) {
         userInfo[@"error"] = error;
