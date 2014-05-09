@@ -74,18 +74,19 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (IBAction)pulledToRefresh:(id)sender;
 {
     [[TSRiverManager sharedManager] refreshRiverIgnoringCache:YES];
+    
+    NSString *highWatermarkIdentifier = [[self itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
+    
+    if (IsEmpty(highWatermarkIdentifier) == NO) {
+        self.highWatermarkIdentifier = highWatermarkIdentifier;
+    }
 }
 
 - (void)prepareDisplayForRiverUpdate;
 {
+    SOAssert([NSThread mainThread] == [NSThread currentThread], @"UI update is not occurring on main thread!");
     [self.refreshControl beginRefreshing];
     self.lastUpdatedButton.title = NSLocalizedString(@"Refreshing...", nil);
-
-    NSString *highWatermarkIdentifier = [[self itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
-
-    if (IsEmpty(highWatermarkIdentifier) == NO) {
-        self.highWatermarkIdentifier = highWatermarkIdentifier;
-    }
 }
 
 - (void)updateDisplayFollowingRiverUpdate;
@@ -132,12 +133,20 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 
 - (IBAction)toggleUpdatedDate:(id)sender;
 {
+    if ([self.refreshControl isRefreshing]) {
+        return;
+    }
+    
     self.showingLastUpdated = !self.showingLastUpdated;
     [self updateDateDisplay];
 }
 
 - (void)updateDateDisplay;
 {
+    if ([self.refreshControl isRefreshing]) {
+        return;
+    }
+    
     NSString *dateTitleForDisplay;
     
     if (self.showingLastUpdated) {
