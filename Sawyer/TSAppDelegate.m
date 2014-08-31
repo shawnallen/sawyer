@@ -59,10 +59,4 @@
     }
 }
 
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
-{
-    DLog(@"");
-    [TSRiverManager sharedManager].sessionCompletionHandler = completionHandler;
-}
-
 @end

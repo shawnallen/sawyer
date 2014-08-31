@@ -41,7 +41,7 @@
 
 @end
 
-NSTimeInterval const TSRiverRefreshUITimeout = 60 * 1;
+NSTimeInterval const TSRiverRefreshUITimeout = 30 * 1;
 
 @implementation TSMasterViewController
 
@@ -106,7 +106,7 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     [self updateDisplayFollowingRiverUpdate];
 
     if ([TSRiverManager sharedManager].lastError != nil) {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[[TSRiverManager sharedManager].lastError description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+        ALog(@"Error fetching River: %@", [[TSRiverManager sharedManager].lastError description]);
     }
 }
 

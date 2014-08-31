@@ -607,18 +607,18 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
 NSString * const TSRiverManagerBeganRefreshRiverNotification = @"TSRiverManagerBeganRefreshRiverNotification";
 NSString * const TSRiverManagerWillRefreshRiverNotification = @"TSRiverManagerWillRefreshRiverNotification";
 NSString * const TSRiverManagerDidRefreshRiverNotification = @"TSRiverManagerDidRefreshRiverNotification";
-NSString * const TSRiverManagerURLSessionConfigurationIdentifier = @"TSRiverManagerURLSessionConfigurationIdentifier";
 NSString * const TSRiverManagerCompletedRefreshRiverNotification = @"TSRiverManagerCompletedRefreshRiverNotification";
 NSString * const TSRiverManagerRiverURLKey = @"river_url";
 NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interval
 
-@interface TSRiverManager () <NSURLSessionDelegate, NSURLSessionDownloadDelegate>
+@interface TSRiverManager () <NSURLSessionDelegate, NSURLSessionDataDelegate>
 @property (nonatomic, readwrite) TSRiver *river;
 @property (nonatomic, readwrite) BOOL isLoading;
 @property (nonatomic, readwrite) NSError *lastError;
 @property (nonatomic) NSURLSession *session;
 @property (nonatomic) NSOperationQueue *sessionQueue;
-@property (nonatomic) NSURLSessionDownloadTask *currentTask;
+@property (nonatomic) NSURLSessionDataTask *currentTask;
+@property (nonatomic) NSMutableData *accumulatedData;
 
 - (TSRiver *)initialRiver;
 - (BOOL)shouldRiverBeUpdated;
@@ -739,6 +739,10 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     if (self.lastError == nil) {
         NSCachedURLResponse *cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data userInfo:@{ @"updatedDate": updatedRiver.whenRiverUpdatedDate == nil ? [NSDate distantPast] : updatedRiver.whenRiverUpdatedDate } storagePolicy:NSURLCacheStorageAllowed];
         [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:request];
+
+        if (updatedRiver.originalURL != nil) {
+            [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:[NSURLRequest requestWithURL:cachedResponse.response.URL]];
+        }
         
         TSRiver *previousRiver = self.river;
         [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerWillRefreshRiverNotification object:nil userInfo:@{ @"river": self.river }];
@@ -820,9 +824,10 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     DLog(@"Performing refresh of River [%@]", self.river);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:self.river.url cachePolicy:(ignoringCache ? NSURLRequestReloadIgnoringLocalCacheData : NSURLRequestUseProtocolCachePolicy) timeoutInterval:60];
-    self.currentTask = [self.session downloadTaskWithRequest:request];
+    self.currentTask = [self.session dataTaskWithRequest:request];
     self.lastError = nil;
     self.isLoading = YES;
+    self.accumulatedData = [NSMutableData new];
     [self.currentTask resume];
     [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerBeganRefreshRiverNotification object:nil userInfo:@{ @"river": self.river }];
     return YES;
@@ -837,21 +842,6 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     [self URLSession:session task:self.currentTask didCompleteWithError:error];
 }
 
-- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session;
-{
-    DLog(@"");
-    SOAssert(self.session == session, @"Unknown session was supplied.");
-    
-    TSRiverManagerBackgroundSessionCompletionHandler sessionCompletionHandler = self.sessionCompletionHandler;
-    self.sessionCompletionHandler = nil;
-    
-    if (sessionCompletionHandler != nil) {
-        sessionCompletionHandler();
-    }
-    
-    DLog(@"Background session complete.");
-}
-
 #pragma mark -
 #pragma mark NSURLSessionTaskDelegate
 
@@ -860,19 +850,20 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     SOAssert(self.session == session, @"Unknown session was supplied.");
 
     if (self.currentTask != task) {
-        DLog(@"Reestablishing backgrounded, completed download task.");
+        DLog(@"Reestablishing prior data task.");
         
         if (self.currentTask != nil) {
-            DLog(@"A download task was present when the session presented a different, completed one.  Undefined behavior will result.");
+            DLog(@"A data task was present when the session presented a different one.  Undefined behavior will result.");
         }
         
-        self.currentTask = (NSURLSessionDownloadTask *)task;
+        self.currentTask = (NSURLSessionDataTask *)task;
     }
 
     SOAssert(self.currentTask.state != NSURLSessionTaskStateRunning, @"Current task was running at the time of completion notification.");
-    
+    [self updateRiverFromRequest:self.currentTask.originalRequest response:self.currentTask.response data:self.accumulatedData];
     self.lastError = error != nil ? error : self.currentTask.error;
     self.currentTask = nil;
+    self.accumulatedData = nil;
     self.isLoading = NO;
     
     NSMutableDictionary *userInfo = self.river == nil ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:@{ @"river" : self.river }];
@@ -885,29 +876,19 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
 }
 
 #pragma mark -
-#pragma mark NSURLSessionDownloadDelegate
+#pragma mark NSURLSessionDataDelegate
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location;
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data;
 {
-    DLog(@"");
     SOAssert(self.session == session, @"Unknown session was supplied.");
-    
-    if (downloadTask.error != nil) {
-        DLog(@"Error occurred during download [%@].", [downloadTask.error localizedDescription]);
+
+    if (dataTask.error != nil) {
+        DLog(@"Error occurred during retrieval [%@].", [dataTask.error localizedDescription]);
         return;
     }
     
-    [self updateRiverFromRequest:downloadTask.originalRequest response:downloadTask.response data:[NSData dataWithContentsOfURL:location]];
-}
-
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes;
-{
-    DLog(@"");
-}
-
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
-{
-    DLog(@"");
+    [self.accumulatedData appendData:data];
 }
 
 #pragma mark -
@@ -920,7 +901,7 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
         self.sessionQueue = [NSOperationQueue new];
         self.sessionQueue.name = @"TSRiverManager";
         self.sessionQueue.maxConcurrentOperationCount = 1;
-        self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration backgroundSessionConfiguration:TSRiverManagerURLSessionConfigurationIdentifier] delegate:self delegateQueue:self.sessionQueue];
+        self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:self.sessionQueue];
         self.river = [self initialRiver];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
     }
