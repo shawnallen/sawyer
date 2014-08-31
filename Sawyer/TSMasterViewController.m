@@ -41,7 +41,7 @@
 
 @end
 
-NSTimeInterval const TSRiverRefreshUITimeout = 30 * 1;
+NSTimeInterval const TSRiverRefreshUITimeout = 60 * 1;
 
 @implementation TSMasterViewController
 

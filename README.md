@@ -8,6 +8,8 @@ The default feed points to Dave Winer's personal River, which you may change by 
 Recent Changes
 ========
 
+* 8/31/14 - Removed background URL sessions (it was just a fun experiment), fixed a couple bugs.
+* 5/2/14 - Background fetch complete, fixed a couple crashers, and added icons and launch images.
 * 4/25/14 - Updated the storyboard, the layout, and resumed working on background fetch.  Removed Instapaper activity.  Updated to the latest TUSafariActivity.
 * 7/15/13 - Updated for the minimum of iOS 7 support, and began work on iOS 7 background fetch and iCloud.  TSRiver does way too much -- so wrong.
 * 6/17/13 - Changed to use UIWebView for processing the JSONP.
