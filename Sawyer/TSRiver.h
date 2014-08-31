@@ -56,15 +56,12 @@ extern NSString * const TSRiverManagerWillRefreshRiverNotification;
 extern NSString * const TSRiverManagerDidRefreshRiverNotification;
 extern NSString * const TSRiverManagerCompletedRefreshRiverNotification;
 extern NSString * const TSRiverDefaultURLString;
-extern NSString * const TSRiverManagerURLSessionConfigurationIdentifier;
-typedef void(^TSRiverManagerBackgroundSessionCompletionHandler)();
 
 @interface TSRiverManager : NSObject
 
 @property (nonatomic, readonly) TSRiver *river;
 @property (nonatomic, readonly) BOOL isLoading;
 @property (nonatomic, readonly) NSError *lastError;
-@property (copy) TSRiverManagerBackgroundSessionCompletionHandler sessionCompletionHandler;
 
 + (TSRiverManager *)sharedManager;
 

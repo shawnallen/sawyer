@@ -30,6 +30,9 @@
 - (IBAction)pulledToRefresh:(id)sender;
 - (void)prepareDisplayForRiverUpdate;
 - (void)updateLatestRiverAndDisplay;
+- (void)riverRefreshTimeout:(NSTimer *)timer;
+- (void)scheduleRiverRefreshWatchdog;
+- (void)cancelRiverRefreshWatchdog;
 
 - (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
 - (TSRiverFeed *)feedForSection:(NSInteger)section;
@@ -37,6 +40,8 @@
 - (NSIndexPath *)indexPathForItem:(TSRiverItem *)item;
 
 @end
+
+NSTimeInterval const TSRiverRefreshUITimeout = 60 * 1;
 
 @implementation TSMasterViewController
 
@@ -69,18 +74,27 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 - (IBAction)pulledToRefresh:(id)sender;
 {
     [[TSRiverManager sharedManager] refreshRiverIgnoringCache:YES];
+    
+    NSString *highWatermarkIdentifier = [[self itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
+    
+    if (IsEmpty(highWatermarkIdentifier) == NO) {
+        self.highWatermarkIdentifier = highWatermarkIdentifier;
+    }
 }
 
 - (void)prepareDisplayForRiverUpdate;
 {
+    SOAssert([NSThread mainThread] == [NSThread currentThread], @"UI update is not occurring on main thread!");
     [self.refreshControl beginRefreshing];
     self.lastUpdatedButton.title = NSLocalizedString(@"Refreshing...", nil);
+}
 
-    NSString *highWatermarkIdentifier = [[self itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
-
-    if (IsEmpty(highWatermarkIdentifier) == NO) {
-        self.highWatermarkIdentifier = highWatermarkIdentifier;
-    }
+- (void)updateDisplayFollowingRiverUpdate;
+{
+    [self.refreshControl endRefreshing];
+    [self updateDateDisplay];
+    [self recalculateWatermark];
+    [self.tableView reloadData];
 }
 
 - (void)updateLatestRiverAndDisplay;
@@ -88,14 +102,11 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     DLog(@"");
     SOAssert([NSThread mainThread] == [NSThread currentThread], @"UI update is not occurring on main thread!");
     
-    [self.refreshControl endRefreshing];
     self.river = [[TSRiverManager sharedManager] river];
-    [self updateDateDisplay];
-    [self recalculateWatermark];
-    [self.tableView reloadData];
+    [self updateDisplayFollowingRiverUpdate];
 
     if ([TSRiverManager sharedManager].lastError != nil) {
-        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error Fetching River", nil) message:[[TSRiverManager sharedManager].lastError description] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil] show];
+        ALog(@"Error fetching River: %@", [[TSRiverManager sharedManager].lastError description]);
     }
 }
 
@@ -122,12 +133,20 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 
 - (IBAction)toggleUpdatedDate:(id)sender;
 {
+    if ([self.refreshControl isRefreshing]) {
+        return;
+    }
+    
     self.showingLastUpdated = !self.showingLastUpdated;
     [self updateDateDisplay];
 }
 
 - (void)updateDateDisplay;
 {
+    if ([self.refreshControl isRefreshing]) {
+        return;
+    }
+    
     NSString *dateTitleForDisplay;
     
     if (self.showingLastUpdated) {
@@ -192,6 +211,22 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     return nil;
 }
 
+- (void)riverRefreshTimeout:(NSTimer *)timer;
+{
+    DLog(@"River refresh timed out.");
+    [self updateLatestRiverAndDisplay];
+}
+
+- (void)scheduleRiverRefreshWatchdog;
+{
+    [self performSelector:@selector(riverRefreshTimeout:) withObject:nil afterDelay:TSRiverRefreshUITimeout];
+}
+
+- (void)cancelRiverRefreshWatchdog;
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(riverRefreshTimeout:) object:nil];
+}
+
 #pragma mark -
 #pragma mark NSObject
 
@@ -237,14 +272,22 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     
     self.riverBeganRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerBeganRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [self prepareDisplayForRiverUpdate];
+        [self scheduleRiverRefreshWatchdog];
     }];
     
     self.riverCompletedRefreshObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         TSRiver *refreshedRiver = note.userInfo[@"river"];
-        SOAssert(refreshedRiver != nil, @"Recieved a River refresh without a River object.");
+        [self cancelRiverRefreshWatchdog];
+        
+        if (refreshedRiver == nil) {
+            DLog(@"River refresh notification received without a new River.  Updating UI with current River.");
+            [self updateDisplayFollowingRiverUpdate];
+            return;
+        }
         
         if (self.river == refreshedRiver || [self.river.fetchedDate isEqualToDate:refreshedRiver.fetchedDate]) {
             DLog(@"River refresh notification received.  Display is already up-to-date.");
+            [self updateDisplayFollowingRiverUpdate];
             return;
         }
         
