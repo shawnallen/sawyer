@@ -3,7 +3,7 @@ Sawyer, a River2 and River3 reader for iPad, iPhone, and iPod touch on iOS 7.0 o
 
 I decided to create, in a few hours (~4), a reference application to experiment with aspects of the iOS SDK which I don't get a chance to mess around with on a daily basis.  This application uses Storyboards, the UIActivityViewController, and whatever I happen to find compelling to extend the app itself with.  As of yet, this is neither production ready or conformant to my personal coding style.
 
-The default feed points to Dave Winer's personal River, which you may change by visiting Settings.  There is no extra effort to decode/translate escaped literals or to process odd encodings; I did change over to use UIWebView for handling the deserialization.
+The default feed points to Dave Winer's personal River, which you may change by visiting Settings.  I made a modest effort to decode/translate escaped literals.
 
 Recent Changes
 ========
