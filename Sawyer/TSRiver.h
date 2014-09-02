@@ -21,7 +21,7 @@
 @property (nonatomic) NSURL *url;
 @property (nonatomic) NSURL *website;
 @property (nonatomic) NSString *title;
-@property (nonatomic) NSString *description;
+@property (nonatomic) NSString *feedDescription;
 @property (nonatomic) NSDate *updatedDate;
 @property (nonatomic) NSArray *items;
 

@@ -495,7 +495,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
             [newFeed setWebsite:[NSURL URLWithString:websiteUrlString]];
         
         [newFeed setTitle:feed[@"feedTitle"]];
-        [newFeed setDescription:feed[@"feedDescription"]];
+        [newFeed setFeedDescription:feed[@"feedDescription"]];
 
         NSString *whenLastUpdateString = feed[@"whenLastUpdate"];
         
