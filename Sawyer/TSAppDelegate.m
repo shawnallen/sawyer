@@ -18,7 +18,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #ifndef DEBUG
-    [Crashlytics startWithAPIKey:@"CRASHLYTICS_API_KEY"];
+    [Crashlytics startWithAPIKey:CRASHLYTICS_API_KEY];
 #endif
     
     // Override point for customization after application launch.
