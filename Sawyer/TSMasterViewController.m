@@ -281,6 +281,12 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
         
         if (refreshedRiver == nil) {
             DLog(@"River refresh notification received without a new River.  Updating UI with current River.");
+            
+            if (self.river == nil) {
+                ALog(@"We do not have a current River.  Creating a mock, empty River.");
+                self.river = [TSRiver new];
+            }
+            
             [self updateDisplayFollowingRiverUpdate];
             return;
         }
