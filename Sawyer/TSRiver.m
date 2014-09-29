@@ -802,10 +802,11 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
             case NSURLSessionTaskStateSuspended:
                 DLog(@"Canceling suspended data task [%@].", self.currentTask.taskDescription);
                 [self.currentTask cancel];
-                return NO;
+                break;
             case NSURLSessionTaskStateRunning:
                 DLog(@"A task is already running, but we have requested a superfluous one through a race.");
-                return NO;
+                [self.currentTask cancel];
+                break;
             case NSURLSessionTaskStateCanceling:
             case NSURLSessionTaskStateCompleted:
                 DLog(@"A task in a terminal state was encountered.  Enqueuing a new data task.");
@@ -818,6 +819,7 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     
     if (ignoringCache == NO && [self shouldRiverBeUpdated] == NO) {
         DLog(@"River is still current and the cached copy is being used.");
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerCompletedRefreshRiverNotification object:nil userInfo:@{ @"river": self.river }];
         return NO;
     }
 

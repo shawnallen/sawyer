@@ -73,13 +73,13 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 
 - (IBAction)pulledToRefresh:(id)sender;
 {
-    [[TSRiverManager sharedManager] refreshRiverIgnoringCache:YES];
-    
     NSString *highWatermarkIdentifier = [[self itemForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] identifier];
     
     if (IsEmpty(highWatermarkIdentifier) == NO) {
         self.highWatermarkIdentifier = highWatermarkIdentifier;
     }
+
+    [[TSRiverManager sharedManager] refreshRiverIgnoringCache:YES];
 }
 
 - (void)prepareDisplayForRiverUpdate;
@@ -166,7 +166,6 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
     [(TSDetailViewController *)segue.destinationViewController setDetailItem:[self itemForIndexPath:indexPath] feed:[self feedForIndexPath:indexPath]];
 }
-
 
 - (TSRiverFeed *)feedForIndexPath:(NSIndexPath *)indexPath;
 {
