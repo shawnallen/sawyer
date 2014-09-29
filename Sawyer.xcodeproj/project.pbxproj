@@ -293,7 +293,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run $CRASHLYTICS_API_KEY";
+			shellScript = "./Crashlytics.framework/run 819f91f18b511e6704b700d268bbbc30345df256 1d519e03bbb410c050a2a766dee818aef04ab2b3640b655c4feaeb593661c11c";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -413,7 +413,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CRASHLYTICS_API_KEY = 819f91f18b511e6704b700d268bbbc30345df256;
 				CURRENT_PROJECT_VERSION = 23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -435,7 +434,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CRASHLYTICS_API_KEY = 819f91f18b511e6704b700d268bbbc30345df256;
 				CURRENT_PROJECT_VERSION = 23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
