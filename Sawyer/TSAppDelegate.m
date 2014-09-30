@@ -19,13 +19,6 @@
 {
 #ifndef DEBUG
     [Crashlytics startWithAPIKey:CRASHLYTICS_API_KEY];
-
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"force_crash"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"force_crash"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        ALog(@"Forcing a crash report at user's request.");
-        [[Crashlytics sharedInstance] crash];
-    }
 #endif
     
     // Override point for customization after application launch.
@@ -37,6 +30,20 @@
     
     [application setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application;
+{
+    DLog(@"");
+
+#ifndef DEBUG
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"force_crash"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"force_crash"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        ALog(@"Forcing a crash report at user's request.");
+        [[Crashlytics sharedInstance] crash];
+    }
+#endif
 }
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
