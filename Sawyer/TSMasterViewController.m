@@ -350,7 +350,7 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     
 #ifndef DEBUG
     if (item == nil) {
-        DLog("Forcing crash.");
+        DLog(@"Forcing crash.");
         [[Crashlytics sharedInstance] crash];
     }
 #endif
