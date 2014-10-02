@@ -15,7 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *forwardButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *actionButton;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
 - (IBAction)showActions:(id)sender;
 - (void)loadLink;

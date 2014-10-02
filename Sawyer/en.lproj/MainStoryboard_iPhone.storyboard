@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="3">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -208,23 +209,6 @@
                                     <outlet property="delegate" destination="bkh-Fd-oOi" id="KdC-Lm-P7d"/>
                                 </connections>
                             </webView>
-                            <toolbar opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="qdo-fT-UvG">
-                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <items>
-                                    <barButtonItem title="&lt;" style="plain" id="y69-8a-CUE">
-                                        <connections>
-                                            <action selector="goBack" destination="e0T-SJ-SFN" id="Buf-Pk-QRe"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="Z25-0H-MVM"/>
-                                    <barButtonItem title=">" style="plain" id="dbR-kw-0gE">
-                                        <connections>
-                                            <action selector="goForward" destination="e0T-SJ-SFN" id="Jdp-X1-a5j"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -237,9 +221,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="actionButton" destination="bQu-h6-VOt" id="Ghq-No-InN"/>
-                        <outlet property="backButton" destination="y69-8a-CUE" id="2eI-Ds-MwU"/>
-                        <outlet property="forwardButton" destination="dbR-kw-0gE" id="vL9-sh-ZgG"/>
-                        <outlet property="toolbar" destination="qdo-fT-UvG" id="NiE-Bk-Pxp"/>
                         <outlet property="webView" destination="e0T-SJ-SFN" id="DCL-ex-FhE"/>
                     </connections>
                 </viewController>

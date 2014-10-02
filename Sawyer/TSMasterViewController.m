@@ -345,6 +345,16 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 {
     TSFeedItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     TSRiverItem *item = [self itemForIndexPath:indexPath];
+    
+    SOAssert(item != nil, @"Nil item was returned when populating a cell!");
+    
+#ifndef DEBUG
+    if (item == nil) {
+        DLog("Forcing crash.");
+        [[Crashlytics sharedInstance] crash];
+    }
+#endif
+    
     cell.riverItem = item;
     return cell;
 }
