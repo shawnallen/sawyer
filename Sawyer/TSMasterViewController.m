@@ -103,6 +103,12 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     SOAssert([NSThread mainThread] == [NSThread currentThread], @"UI update is not occurring on main thread!");
     
     self.river = [[TSRiverManager sharedManager] river];
+    
+    if (self.river == nil) {
+        ALog(@"We do not have a current River.  Creating a mock, empty River.");
+        self.river = [TSRiver new];    self.river = [TSRiver new];
+    }
+    
     [self updateDisplayFollowingRiverUpdate];
 
     if ([TSRiverManager sharedManager].lastError != nil) {
