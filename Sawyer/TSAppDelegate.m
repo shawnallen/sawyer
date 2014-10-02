@@ -41,7 +41,7 @@
 {
     DLog(@"");
     NSDate *whenRiverUpdatedDate = [TSRiverManager sharedManager].river.whenRiverUpdatedDate;
-    __block BOOL hasNotifiedCompletionHandler;
+    __block BOOL hasNotifiedCompletionHandler = NO;
     
     self.refreshRiverObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         id refreshRiverObserver = self.refreshRiverObserver;
