@@ -103,12 +103,7 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     SOAssert([NSThread mainThread] == [NSThread currentThread], @"UI update is not occurring on main thread!");
     
     self.river = [[TSRiverManager sharedManager] river];
-    
-    if (self.river == nil) {
-        ALog(@"We do not have a current River.  Creating a mock, empty River.");
-        self.river = [TSRiver new];    self.river = [TSRiver new];
-    }
-    
+    SOAssert(self.river != nil, @"We do not have a valid River.");
     [self updateDisplayFollowingRiverUpdate];
 
     if ([TSRiverManager sharedManager].lastError != nil) {
@@ -311,14 +306,6 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
     }
     
     [self updateLatestRiverAndDisplay];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    [[NSNotificationCenter defaultCenter] removeObserver:self.riverBeganRefreshObserver];
-    [[NSNotificationCenter defaultCenter] removeObserver:self.riverCompletedRefreshObserver];
-    [self setRiver:nil];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
