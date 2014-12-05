@@ -232,7 +232,7 @@
         <!--Web View Controller-->
         <scene sceneID="GaH-pE-g3h">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" id="bkh-Fd-oOi" customClass="TSWebViewController" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="bkh-Fd-oOi" customClass="TSWebViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HQm-8g-P5j"/>
                         <viewControllerLayoutGuide type="bottom" id="Pya-IJ-gTt"/>
@@ -241,7 +241,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" fixedFrame="YES" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0T-SJ-SFN">
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0T-SJ-SFN">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
                                 <connections>
@@ -250,6 +251,12 @@
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="e0T-SJ-SFN" firstAttribute="leading" secondItem="42g-ON-7pY" secondAttribute="leading" id="26h-7I-DbK"/>
+                            <constraint firstItem="e0T-SJ-SFN" firstAttribute="top" secondItem="42g-ON-7pY" secondAttribute="top" id="3YY-lg-0oy"/>
+                            <constraint firstAttribute="trailing" secondItem="e0T-SJ-SFN" secondAttribute="trailing" id="Loc-6c-iQg"/>
+                            <constraint firstItem="e0T-SJ-SFN" firstAttribute="bottom" secondItem="Pya-IJ-gTt" secondAttribute="top" id="xSU-Hh-tGz"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="zud-Qz-Fq6">
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="bQu-h6-VOt">
@@ -265,7 +272,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lGF-aK-qSI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1995" y="-23.239436619718308"/>
+            <point key="canvasLocation" x="2036" y="-24"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
