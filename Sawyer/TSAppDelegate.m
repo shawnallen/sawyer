@@ -41,34 +41,26 @@
 {
     DLog(@"");
     NSDate *whenRiverUpdatedDate = [TSRiverManager sharedManager].river.whenRiverUpdatedDate;
-    __block BOOL hasNotifiedCompletionHandler = NO;
     
     self.refreshRiverObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         id refreshRiverObserver = self.refreshRiverObserver;
-        self.refreshRiverObserver = nil;
         [[NSNotificationCenter defaultCenter] removeObserver:refreshRiverObserver];
+        self.refreshRiverObserver = nil;
 
         NSError *error = note.userInfo[@"error"];
         
         if (error != nil) {
             DLog(@"Background fetch failed.");
-            if (hasNotifiedCompletionHandler == NO) {
-                hasNotifiedCompletionHandler = YES;
-                completionHandler(UIBackgroundFetchResultFailed);
-            }
+            completionHandler(UIBackgroundFetchResultFailed);
         } else {
             DLog(@"Background fetch successful.");
-            if (hasNotifiedCompletionHandler == NO) {
-                hasNotifiedCompletionHandler = YES;
-                completionHandler([whenRiverUpdatedDate compare:[TSRiverManager sharedManager].river.whenRiverUpdatedDate] == NSOrderedSame ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData);
-            }
+            completionHandler([whenRiverUpdatedDate compare:[TSRiverManager sharedManager].river.whenRiverUpdatedDate] == NSOrderedSame ? UIBackgroundFetchResultNewData : UIBackgroundFetchResultNoData);
         }
     }];
     
     if ([[TSRiverManager sharedManager] refreshRiverIgnoringCache:NO] == NO) {
         [[NSNotificationCenter defaultCenter] removeObserver:self.refreshRiverObserver];
         self.refreshRiverObserver = nil;
-        hasNotifiedCompletionHandler = YES;
         completionHandler(UIBackgroundFetchResultNoData);
     }
 }
