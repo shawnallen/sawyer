@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,21 +11,33 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Ndf-hJ-Lbx">
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Ndf-hJ-Lbx">
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </tableView>
-                <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gvb-9c-KQN">
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gvb-9c-KQN">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                     <items>
                         <navigationItem title="Sawyer" id="Pa6-gA-vm7"/>
                     </items>
                 </navigationBar>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SSR-8d-zTk">
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SSR-8d-zTk">
                     <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                     <items/>
                 </toolbar>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="SSR-8d-zTk" secondAttribute="trailing" id="4On-F8-F9J"/>
+                <constraint firstItem="gvb-9c-KQN" firstAttribute="trailing" secondItem="SSR-8d-zTk" secondAttribute="trailing" id="8YA-ew-dfO"/>
+                <constraint firstItem="gvb-9c-KQN" firstAttribute="top" secondItem="Ndf-hJ-Lbx" secondAttribute="bottom" id="Fqi-KP-6IM"/>
+                <constraint firstItem="gvb-9c-KQN" firstAttribute="leading" secondItem="Ndf-hJ-Lbx" secondAttribute="trailing" id="WLc-9x-GR8"/>
+                <constraint firstAttribute="bottom" secondItem="SSR-8d-zTk" secondAttribute="bottom" id="gbr-gl-AyN"/>
+                <constraint firstItem="Ndf-hJ-Lbx" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="iKD-ZX-IoW"/>
+                <constraint firstItem="Ndf-hJ-Lbx" firstAttribute="leading" secondItem="SSR-8d-zTk" secondAttribute="leading" id="jBv-90-snT"/>
+                <constraint firstItem="Ndf-hJ-Lbx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="lvw-kd-rzC"/>
+                <constraint firstItem="Ndf-hJ-Lbx" firstAttribute="top" secondItem="gvb-9c-KQN" secondAttribute="top" id="qcH-qP-143"/>
+                <constraint firstItem="Ndf-hJ-Lbx" firstAttribute="leading" secondItem="gvb-9c-KQN" secondAttribute="leading" id="rJn-IX-hDS"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <point key="canvasLocation" x="393" y="445"/>
         </view>
