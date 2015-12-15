@@ -10,7 +10,6 @@
 #import "TSRiver.h"
 
 @interface TSAppDelegate ()
-@property (nonatomic) id refreshRiverObserver;
 @end
 
 @implementation TSAppDelegate
@@ -37,11 +36,15 @@
 {
     DLog(@"");
     NSDate *whenRiverUpdatedDate = [TSRiverManager sharedManager].river.whenRiverUpdatedDate;
-    
-    self.refreshRiverObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        id refreshRiverObserver = self.refreshRiverObserver;
+    __block BOOL hasCompletionHandlerBeenInvoked = NO;
+    __block id refreshRiverObserver = [[NSNotificationCenter defaultCenter] addObserverForName:TSRiverManagerCompletedRefreshRiverNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         [[NSNotificationCenter defaultCenter] removeObserver:refreshRiverObserver];
-        self.refreshRiverObserver = nil;
+        
+        if (hasCompletionHandlerBeenInvoked) {
+            return;
+        } else {
+            hasCompletionHandlerBeenInvoked = YES;
+        }
 
         NSError *error = note.userInfo[@"error"];
         
@@ -55,8 +58,13 @@
     }];
     
     if ([[TSRiverManager sharedManager] refreshRiverIgnoringCache:NO] == NO) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self.refreshRiverObserver];
-        self.refreshRiverObserver = nil;
+        [[NSNotificationCenter defaultCenter] removeObserver:refreshRiverObserver];
+        
+        if (hasCompletionHandlerBeenInvoked) {
+            return;
+        }
+
+        hasCompletionHandlerBeenInvoked = YES;
         completionHandler(UIBackgroundFetchResultNoData);
     }
 }

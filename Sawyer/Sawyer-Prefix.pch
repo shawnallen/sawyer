@@ -14,9 +14,4 @@
 
     #import "SOPrefix.h"
 
-#ifndef DEBUG
-    #import <Crashlytics/Crashlytics.h>
-    #define NSLog CLSLog
-#endif
-
 #endif
