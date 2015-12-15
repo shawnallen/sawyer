@@ -25,6 +25,7 @@
 		29CBB373190B02A00031403F /* UIViewController+SASegueAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB372190B02A00031403F /* UIViewController+SASegueAdditions.m */; };
 		29CBB376190B03660031403F /* TSActivityUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 29CBB375190B03660031403F /* TSActivityUtilities.m */; };
 		29CBB378190B20010031403F /* TUSafariActivity.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 29CBB377190B20010031403F /* TUSafariActivity.bundle */; };
+		29D67FE51C2068F000C45A3E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D67FE41C2068F000C45A3E /* SafariServices.framework */; };
 		29FC9D7C190FEF60000FE91A /* NSDate+HTTP.m in Sources */ = {isa = PBXBuildFile; fileRef = 29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */; };
 		29FC9D8B19102127000FE91A /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 29FC9D8219102127000FE91A /* iTunesArtwork */; };
 		29FC9D8C19102127000FE91A /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 29FC9D8319102127000FE91A /* iTunesArtwork@2x */; };
@@ -65,6 +66,7 @@
 		29CBB374190B03660031403F /* TSActivityUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSActivityUtilities.h; sourceTree = "<group>"; };
 		29CBB375190B03660031403F /* TSActivityUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSActivityUtilities.m; sourceTree = "<group>"; };
 		29CBB377190B20010031403F /* TUSafariActivity.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TUSafariActivity.bundle; sourceTree = "<group>"; };
+		29D67FE41C2068F000C45A3E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		29FC9D7A190FEF60000FE91A /* NSDate+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+HTTP.h"; sourceTree = "<group>"; };
 		29FC9D7B190FEF60000FE91A /* NSDate+HTTP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HTTP.m"; sourceTree = "<group>"; };
 		29FC9D8219102127000FE91A /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29D67FE51C2068F000C45A3E /* SafariServices.framework in Frameworks */,
 				5242705E1760F55E00DF3CFE /* Security.framework in Frameworks */,
 				292D7EBE1911520C006404B5 /* Crashlytics.framework in Frameworks */,
 				29649CCB175F7B7B005C4466 /* UIKit.framework in Frameworks */,
@@ -113,6 +116,7 @@
 		29649CC9175F7B7B005C4466 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				29D67FE41C2068F000C45A3E /* SafariServices.framework */,
 				292D7EBD1911520C006404B5 /* Crashlytics.framework */,
 				521DCA771770B7D500865F44 /* QuartzCore.framework */,
 				29649CCA175F7B7B005C4466 /* UIKit.framework */,
@@ -214,11 +218,11 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = TS;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Sotto, LLC";
 				TargetAttributes = {
 					29649CC6175F7B7B005C4466 = {
-						DevelopmentTeam = SVLUY7HCQ7;
+						DevelopmentTeam = WV8RM83N97;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -347,6 +351,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -398,7 +403,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CURRENT_PROJECT_VERSION = 36;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 38;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -408,6 +416,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "CRASHLYTICS_API_KEY=@\\\"$(CRASHLYTICS_API_KEY)\\\"";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sotto.Sawyer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -420,7 +429,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CURRENT_PROJECT_VERSION = 36;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 38;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -430,6 +442,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "CRASHLYTICS_API_KEY=@\\\"$(CRASHLYTICS_API_KEY)\\\"";
 				INFOPLIST_FILE = "Sawyer/Sawyer-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sotto.Sawyer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

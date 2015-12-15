@@ -9,8 +9,9 @@
 #import "TSDetailViewController.h"
 #import "TSRiver.h"
 #import "TSActivityUtilities.h"
+@import SafariServices;
 
-@interface TSDetailViewController ()
+@interface TSDetailViewController () <SFSafariViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *detailEnclosingView;
 @property (weak, nonatomic) IBOutlet UIButton *feedTitleButton;
 @property (weak, nonatomic) IBOutlet UIButton *linkButton;
@@ -24,7 +25,8 @@
 
 - (void)configureView;
 - (IBAction)showActions:(id)sender;
-- (void)showLink:(UIStoryboardSegue *)segue sender:(id)sender;
+- (IBAction)showLink:(id)sender;
+- (IBAction)showFeedWebsite:(id)sender;
 @end
 
 @implementation TSDetailViewController
@@ -84,6 +86,32 @@
 - (void)showFeedWebsite:(UIStoryboardSegue *)segue sender:(id)sender;
 {
     [[segue destinationViewController] setLink:[[self riverFeed] website]];
+}
+
+- (IBAction)showLink:(id)sender;
+{
+    NSURL *targetURL = [[self riverItem] link];
+    
+    if (IsEmpty(targetURL)) {
+        return;
+    }
+    
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:targetURL];
+    safariViewController.delegate = self;
+    [self presentViewController:safariViewController animated:YES completion:nil];
+}
+
+- (IBAction)showFeedWebsite:(id)sender;
+{
+    NSURL *targetURL = [[self riverFeed] website];
+    
+    if (IsEmpty(targetURL)) {
+        return;
+    }
+    
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:targetURL];
+    safariViewController.delegate = self;
+    [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
 #pragma mark -

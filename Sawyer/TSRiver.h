@@ -16,17 +16,6 @@
 
 @end
 
-@interface TSRiverFeed : NSObject
-
-@property (nonatomic) NSURL *url;
-@property (nonatomic) NSURL *website;
-@property (nonatomic) NSString *title;
-@property (nonatomic) NSString *feedDescription;
-@property (nonatomic) NSDate *updatedDate;
-@property (nonatomic) NSArray *items;
-
-@end
-
 @interface TSRiverItem : NSObject
 
 @property (nonatomic) NSString *body;
@@ -39,9 +28,20 @@
 
 @end
 
+@interface TSRiverFeed : NSObject
+
+@property (nonatomic) NSURL *url;
+@property (nonatomic) NSURL *website;
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *feedDescription;
+@property (nonatomic) NSDate *updatedDate;
+@property (nonatomic) NSArray<TSRiverItem *> *items;
+
+@end
+
 @interface TSRiver : NSObject
 
-@property (nonatomic, readonly) NSArray *feeds;
+@property (nonatomic, readonly) NSArray<TSRiverFeed *> *feeds;
 @property (nonatomic, readonly) NSDate *fetchedDate;
 @property (nonatomic, readonly) NSDate *whenRiverUpdatedDate;
 @property (nonatomic, readonly) NSURL *url;

@@ -493,6 +493,9 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
         
         if (IsEmpty(websiteUrlString) == NO)
             [newFeed setWebsite:[NSURL URLWithString:websiteUrlString]];
+        else if (IsEmpty(newFeed.url) == NO) {
+            [newFeed setWebsite:[[NSURL alloc] initWithScheme:newFeed.url.scheme host:newFeed.url.host path:@"/"]];
+        }
         
         [newFeed setTitle:feed[@"feedTitle"]];
         [newFeed setFeedDescription:feed[@"feedDescription"]];
