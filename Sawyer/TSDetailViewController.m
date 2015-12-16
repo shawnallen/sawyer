@@ -78,16 +78,6 @@
     }
 }
 
-- (void)showLink:(UIStoryboardSegue *)segue sender:(id)sender;
-{
-    [[segue destinationViewController] setLink:[[self riverItem] link]];
-}
-
-- (void)showFeedWebsite:(UIStoryboardSegue *)segue sender:(id)sender;
-{
-    [[segue destinationViewController] setLink:[[self riverFeed] website]];
-}
-
 - (IBAction)showLink:(id)sender;
 {
     NSURL *targetURL = [[self riverItem] link];
