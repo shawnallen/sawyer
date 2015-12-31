@@ -748,8 +748,14 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
         }
         
         TSRiver *previousRiver = self.river;
-        [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerWillRefreshRiverNotification object:nil userInfo:@{ @"river": self.river }];
         self.river = updatedRiver;
+        
+        if (previousRiver == nil) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerDidRefreshRiverNotification object:nil userInfo:@{ @"river" : self.river }];
+            return;
+        }
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerWillRefreshRiverNotification object:nil userInfo:@{ @"river": previousRiver }];
         [[NSNotificationCenter defaultCenter] postNotificationName:TSRiverManagerDidRefreshRiverNotification object:nil userInfo:@{ @"river" : self.river, @"previousRiver" : previousRiver}];
     }
 }
