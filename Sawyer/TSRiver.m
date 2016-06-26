@@ -902,6 +902,11 @@ NSTimeInterval const TSRiverUpdateInterval = 60 * 20;  // 20 minute time interva
     [self.accumulatedData appendData:data];
 }
 
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask willCacheResponse:(NSCachedURLResponse *)proposedResponse completionHandler:(void (^)(NSCachedURLResponse * _Nullable))completionHandler;
+{
+    completionHandler(proposedResponse);
+}
+
 #pragma mark -
 #pragma mark NSObject
 
