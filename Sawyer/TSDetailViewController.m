@@ -70,7 +70,7 @@
         UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityController];
         [popoverController presentPopoverFromBarButtonItem:[[self navigationItem] rightBarButtonItem] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         
-        [activityController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+        [activityController setCompletionWithItemsHandler:^(NSString * __nullable activityType, BOOL completed, NSArray * __nullable returnedItems, NSError * __nullable activityError) {
             [popoverController dismissPopoverAnimated:YES];
         }];
     } else {
