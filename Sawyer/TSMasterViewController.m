@@ -353,7 +353,9 @@ NSString * const kHighWatermarkIdentifierKey = @"highWatermarkIdentifier";
 {
     [self setHighWatermarkIdentifier:[self itemForIndexPath:indexPath].identifier];
     [self recalculateWatermark];
-    [self performSelector:@selector(setEditing:) withObject:NO afterDelay:0.0];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setEditing:NO];
+    });
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;
