@@ -54,7 +54,7 @@ static inline NSDateFormatter* createDateFormatter(NSString *format)
     static dispatch_queue_t _httpDateQueue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _httpDateQueue = dispatch_queue_create("com.pearson.NSDate_HTTP", DISPATCH_QUEUE_SERIAL);
+        _httpDateQueue = dispatch_queue_create([NSStringFromClass([self class]) UTF8String], DISPATCH_QUEUE_SERIAL);
     });
     
     __block NSDate *date = nil;

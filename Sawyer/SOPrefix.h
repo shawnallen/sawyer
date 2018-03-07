@@ -15,7 +15,7 @@ static inline BOOL IsEmpty(id thing)
         && [(NSArray *)thing count] == 0);
 }
 
-static inline void performOnMainThread(void (^block)())
+static inline void performOnMainThread(void (^block)(void))
 {
     if ([NSThread isMainThread] == YES)
         block();

@@ -461,7 +461,7 @@ NSString * const TSRiverDefaultPaddingFunctionName = @"onGetRiverStream";
     return unmangledRiverString;
 }
 
-- (BOOL)populateRiverFromData:(NSData *)data error:(NSError **)error;
+- (BOOL)populateRiverFromData:(NSData *)data error:(NSError * __autoreleasing *)error;
 {
     __block NSDictionary *newRiver;
     
